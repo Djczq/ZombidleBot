@@ -112,9 +112,11 @@ def readCharacters(img, box):
 
 def processDeal(img):
     read = readCharacters(img, dealContentBox)
-    if "Skull" in read or "damage" in read or "chest" in read:
+    if "Skull" in read or "damage" in read or "chest" in read or "minutes" in read:
         return (dealNoPos[0], dealNoPos[1])
-    if "x" in read or "craft" in read:
+    if "sec" in read and "nds" in read:
+        return (dealNoPos[0], dealNoPos[1])
+    if "x" in read or "craft" in read or "time" in read:
         if "free" in read:
             return (dealAwsomePos[0], dealAwsomePos[1])
         else:
