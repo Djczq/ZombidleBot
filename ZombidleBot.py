@@ -33,11 +33,13 @@ fastGhostCraftPos = (600, 130)
 repeatLastCraftPos = (812, 130)
 
 dealBox = (560, 80, 700, 110)
+dealThanksBox = (440, 108, 516, 129)
 dealContentBox = (410, 180, 852, 376)
 dealAwsomeBox = (732, 445, 828, 467)
 dealAwsomePos = (777, 455)
 dealNoPos = (486, 455)
 dealYesPos = (650, 455)
+dealExitPubPos = (666, 140)
 
 backArrowPos = (75, 575)
 
@@ -147,6 +149,10 @@ def determineAction(img):
     if read == "THE DEAL":
         return (3, )
 
+    read = readCharacters(img, dealThanksBox)
+    if read == "Thanks!":
+        return (7, dealExitPubPos[0], dealExitPubPos[1])
+
     template = cv2.imread("ArcaneIMG.png", 0)
     res = findTemplateInImage(img, template)
     if isInside(res, arcaneIMGBox):
@@ -176,7 +182,7 @@ def takeAction(driver, zg):
     img = cv2.imdecode(arr, 0)
 
     action  = determineAction(img)
-    if action[0] == 1 or action[0] == 2:
+    if action[0] == 1 or action[0] == 2 or action[0] == 7:
         click(driver, zg, action[1], action[2])
     if action[0] == 3:
         r = processDeal(img)
