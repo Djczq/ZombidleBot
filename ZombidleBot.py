@@ -122,14 +122,14 @@ def processDeal(img):
     return (dealNoPos[0], dealNoPos[1])
 
 def processArcane(img):
-    if img[nextBoostPos[1], nextBoostPos[0]] > 55:
-        return (nextBoostPos[0], nextBoostPos[1])
     if img[collectAllPos[1], collectAllPos[0]] > 55:
         return (collectAllPos[0], collectAllPos[1])
     if img[repeatLastCraftPos[1], repeatLastCraftPos[0]] > 55:
         return (repeatLastCraftPos[0], repeatLastCraftPos[1])
     if img[fastGhostCraftPos[1], fastGhostCraftPos[0]] > 55:
         return (fastGhostCraftPos[0], fastGhostCraftPos[1])
+    if img[nextBoostPos[1], nextBoostPos[0]] > 55:
+        return (nextBoostPos[0], nextBoostPos[1])
     return (arcaneQuitPos[0], arcaneQuitPos[1])
 
 def goToArcane(driver, zg, img):
