@@ -7,41 +7,13 @@ import pytesseract
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 
+import Configs
+import ImageAnalyser as ia
+import BotEngine as be
+import LaunchZombidle as lz
+
 
 screenShotFolder = "screenshots"
-
-# coord : (width = left-->rigth (x), heigh = top-->bottom (y))
-# box : (top-left width, top-left heigh, bottom-rigth width, bottom-rigth heigh)
-notifDeplaSize=(65, 0)
-notifSize=(24, 24)
-notifPos=(90, 30)
-notifBox=(74, 9, 440, 72)
-
-itemTabPos=(810, 140)
-
-clickPos = (155, 333)
-
-goToArcaneBox = (824, 234, 900, 287)
-arcaneIMGBox = (745, 12, 770, 80)
-goToArcanePos = (860, 260)
-arcaneTimerBox = (834, 66, 938, 92)
-arcaneQuitPos = (914, 46)
-
-nextBoostPos = (196, 130)
-collectAllPos = (377, 130)
-fastGhostCraftPos = (600, 130)
-repeatLastCraftPos = (812, 130)
-
-dealBox = (560, 80, 700, 110)
-dealThanksBox = (440, 108, 516, 129)
-dealContentBox = (410, 180, 852, 376)
-dealAwsomeBox = (732, 445, 828, 467)
-dealAwsomePos = (777, 455)
-dealNoPos = (486, 455)
-dealYesPos = (650, 455)
-dealExitPubPos = (666, 140)
-
-backArrowPos = (75, 575)
 
 def takeScreenshot(driver):
     el = driver.find_element(By.ID, 'zigame')
@@ -50,9 +22,9 @@ def takeScreenshot(driver):
         os.makedirs(screenShotFolder)
     el.screenshot(screenShotFolder + "/screenshot_" + str(now.isoformat()) + ".png")
 
-def autoclick(driver, zg):
+def autoclick(driver, zg, configs):
     move = ActionChains(driver)
-    move.move_to_element_with_offset(zg, clickPos[0], clickPos[1])
+    move.move_to_element_with_offset(zg, configs.clickPos[0], configs.clickPos[1])
     move.perform()
     click = ActionChains(driver)
     click.click_and_hold()
@@ -72,11 +44,12 @@ def click(driver, zg, x, y):
     a.release()
     a.perform()
 
-def saveItemNotif(driver, name, pos=1):
+def saveItemNotif(driver, name, configs, pos=1):
     el = driver.find_element(By.ID, 'zigame')
     arr = np.fromstring(el.screenshot_as_png, np.uint8)
     img = cv2.imdecode(arr, 1)
-    crop_img = img[notifPos[1] : notifPos[1] + notifSize[1], notifPos[0] + notifDeplaSize[0] * (pos - 1) : notifPos[0] + notifSize[0] + notifDeplaSize[0] * (pos - 1)].copy()
+    crop_img = img[configs.notifPos[1] : configs.notifPos[1] + configs.notifSize[1],
+        configs.notifPos[0] + configs.notifDeplaSize[0] * (pos - 1) : configs.notifPos[0] + configs.notifSize[0] + configs.notifDeplaSize[0] * (pos - 1)].copy()
     cv2.imwrite(name, crop_img)
 
 def saveScreenPart(driver, name, box):
@@ -85,123 +58,57 @@ def saveScreenPart(driver, name, box):
     img = cv2.imdecode(arr, 1)
     cv2.imwrite(name, img[box[1]:box[3], box[0]:box[2]])
 
-def saveGoToArcaneButton(driver):
-    saveScreenPart(driver, "GoToArcaneButton.png", goToArcaneBox)
+def saveGoToArcaneButton(driver, configs):
+    saveScreenPart(driver, "GoToArcaneButton.png", configs.goToArcaneBox)
 
-def saveArcaneIMG(driver):
-    saveScreenPart(driver, "ArcaneIMG.png", arcaneIMGBox)
+def saveArcaneIMG(driver, configs):
+    saveScreenPart(driver, "ArcaneIMG.png", configs.arcaneIMGBox)
 
-def findTemplateInImage(img, template):
-    res = cv2.matchTemplate(img, template, cv2.TM_CCOEFF)
-    w, h = template.shape[::-1]
-    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-    return (max_loc[0], max_loc[1], max_loc[0] + w, max_loc[1] + h)
-
-def isInside(boxIn, boxOut):
-    """check if boxIn is inside boxOut"""
-    if boxIn[0] < boxOut[0] or boxIn[0] > boxOut[2]:
-        return False
-    if boxIn[2] < boxOut[0] or boxIn[2] > boxOut[2]:
-        return False
-    if boxIn[1] < boxOut[1] or boxIn[1] > boxOut[3]:
-        return False
-    if boxIn[3] < boxOut[1] or boxIn[3] > boxOut[3]:
-        return False
-    return True
-
-def readCharacters(img, box):
-    return pytesseract.image_to_string(img[box[1]:box[3], box[0]:box[2]])
-
-def processDeal(img):
-    read = readCharacters(img, dealContentBox)
-    if "Skull" in read or "damage" in read or "chest" in read or "minutes" in read:
-        return (dealNoPos[0], dealNoPos[1])
-    if "sec" in read and "nds" in read:
-        return (dealNoPos[0], dealNoPos[1])
-    if "x" in read or "craft" in read or "time" in read:
-        if "free" in read:
-            return (dealAwsomePos[0], dealAwsomePos[1])
-        else:
-            return (dealYesPos[0], dealYesPos[1])
-    return (dealNoPos[0], dealNoPos[1])
-
-def processArcane(img):
-    if img[collectAllPos[1], collectAllPos[0]] > 55:
-        return (collectAllPos[0], collectAllPos[1])
-    if img[repeatLastCraftPos[1], repeatLastCraftPos[0]] > 55:
-        return (repeatLastCraftPos[0], repeatLastCraftPos[1])
-    if img[fastGhostCraftPos[1], fastGhostCraftPos[0]] > 55:
-        return (fastGhostCraftPos[0], fastGhostCraftPos[1])
-    if img[nextBoostPos[1], nextBoostPos[0]] > 55:
-        return (nextBoostPos[0], nextBoostPos[1])
-    return (arcaneQuitPos[0], arcaneQuitPos[1])
-
-def goToArcane(driver, zg, img):
+def goToArcane(driver, zg, img, configs):
     template = cv2.imread("GoToArcaneButton.png", 0)
-    res = findTemplateInImage(img, template)
-    if isInside(res, goToArcaneBox):
-        click(driver, zg, goToArcanePos[0], goToArcanePos[1])
+    res = ia.findTemplateInImage(img, template)
+    if ia.isInside(res, configs.goToArcaneBox):
+        click(driver, zg, configs.goToArcanePos[0], configs.goToArcanePos[1])
     else:
-        click(driver, zg, itemTabPos[0], itemTabPos[1])
+        click(driver, zg, configs.itemTabPos[0], configs.itemTabPos[1])
     
-def determineAction(img):
-    read = readCharacters(img, dealBox)
-    if read == "THE DEAL":
-        return (3, )
-
-    read = readCharacters(img, dealThanksBox)
-    if read == "Thanks!":
-        return (7, dealExitPubPos[0], dealExitPubPos[1])
-
-    template = cv2.imread("ArcaneIMG.png", 0)
-    res = findTemplateInImage(img, template)
-    if isInside(res, arcaneIMGBox):
-        return (5, )
-
-    template = cv2.imread("Scroll.png", 0)
-    res = findTemplateInImage(img, template)
-    if isInside(res, notifBox):
-        return (1, (res[0] + res[2]) / 2, (res[1] + res[3]) / 2)
-    template = cv2.imread("ChestCollector.png", 0)
-    res = findTemplateInImage(img, template)
-    if isInside(res, notifBox):
-        return (2, (res[0] + res[2]) / 2, (res[1] + res[3]) / 2)
-
-    read = readCharacters(img, arcaneTimerBox)
-    if "A" in read:
-        return (4, )
-
-    print img[backArrowPos[1], backArrowPos[0]]
-    if img[backArrowPos[1], backArrowPos[0]] == 211:
-        return (6, )
-    return (0, )
-
-
-def takeAction(driver, zg):
+def takeAction(driver, zg, configs):
     arr = np.fromstring(zg.screenshot_as_png, np.uint8)
     img = cv2.imdecode(arr, 0)
 
-    action  = determineAction(img)
+    action  = be.determineAction(img, configs)
     if action[0] == 1 or action[0] == 2 or action[0] == 7:
         click(driver, zg, action[1], action[2])
     if action[0] == 3:
-        r = processDeal(img)
+        r = be.processDeal(img, configs)
         click(driver, zg, r[0], r[1])
     if action[0] == 4:
-        goToArcane(driver, zg, img)
+        goToArcane(driver, zg, img, configs)
     if action[0] == 5:
-        r = processArcane(img)
+        r = be.processArcane(img, configs)
         click(driver, zg, r[0], r[1])
     if action[0] == 6:
-        autoclick(driver, zg)
+        autoclick(driver, zg, configs)
 
 
 
 def run(driver, it=10):
     zg = driver.find_element(By.ID, 'zigame')
+    configs = Configs.Configs()
     for i in range(it):
-        takeAction(driver, zg)
+        takeAction(driver, zg, configs)
         time.sleep(1)
 
 
 
+def main():
+    driver = lz.openBrowser()
+    lz.launchZombidle(driver)
+    run(driver)
+    return driver
+
+
+
+if __name__ == "__main__":
+    # execute only if run as a script
+    driver = main()
