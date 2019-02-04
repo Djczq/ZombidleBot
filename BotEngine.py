@@ -51,7 +51,12 @@ def determineAction(img, configs):
 
     read = ia.readCharacters(img, configs.arcaneTimerBox)
     if "A" in read:
-        return (4, )
+        template = cv2.imread("GoToArcaneButton.png", 0)
+        res = ia.findTemplateInImage(img, template)
+        if ia.isInside(res, configs.goToArcaneBox):
+            return (4, configs.goToArcanePos[0], configs.goToArcanePos[1])
+        else:
+            return (4, configs.itemTabPos[0], configs.itemTabPos[1])
 
     if img[configs.backArrowPos[1], configs.backArrowPos[0]] == 211:
         return (6, )

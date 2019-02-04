@@ -64,26 +64,16 @@ def saveGoToArcaneButton(driver, configs):
 def saveArcaneIMG(driver, configs):
     saveScreenPart(driver, "ArcaneIMG.png", configs.arcaneIMGBox)
 
-def goToArcane(driver, zg, img, configs):
-    template = cv2.imread("GoToArcaneButton.png", 0)
-    res = ia.findTemplateInImage(img, template)
-    if ia.isInside(res, configs.goToArcaneBox):
-        click(driver, zg, configs.goToArcanePos[0], configs.goToArcanePos[1])
-    else:
-        click(driver, zg, configs.itemTabPos[0], configs.itemTabPos[1])
-    
 def takeAction(driver, zg, configs):
     arr = np.fromstring(zg.screenshot_as_png, np.uint8)
     img = cv2.imdecode(arr, 0)
 
     action  = be.determineAction(img, configs)
-    if action[0] == 1 or action[0] == 2 or action[0] == 7:
+    if action[0] == 1 or action[0] == 2 or action[0] == 7 or action[0] == 4:
         click(driver, zg, action[1], action[2])
     if action[0] == 3:
         r = be.processDeal(img, configs)
         click(driver, zg, r[0], r[1])
-    if action[0] == 4:
-        goToArcane(driver, zg, img, configs)
     if action[0] == 5:
         r = be.processArcane(img, configs)
         click(driver, zg, r[0], r[1])
