@@ -31,6 +31,7 @@ file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 stream_handler = logging.StreamHandler()
 stream_handler.setLevel(logging.DEBUG)
+stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
 
 screenShotFolder = "screenshots"
@@ -87,7 +88,6 @@ def saveArcaneIMG(driver, configs):
     saveScreenPart(driver, "ArcaneIMG.png", configs.arcaneIMGBox)
 
 def takeAction(driver, zg, configs):
-    logger.info("Action")
     arr = np.fromstring(zg.screenshot_as_png, np.uint8)
     img = cv2.imdecode(arr, 0)
 
