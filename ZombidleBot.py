@@ -15,6 +15,9 @@ import LaunchZombidle as lz
 import logging
 from logging.handlers import RotatingFileHandler
 
+def getTimeNow():
+    return datetime.datetime.now().strftime("%Y.%m.%d_%H.%M.%S.%f")
+
 if not os.path.exists("logs"):
     os.makedirs("logs")
 
@@ -22,7 +25,7 @@ logger = logging.getLogger("ZombidleBotLogger")
 logger.setLevel(logging.DEBUG)
 now = datetime.datetime.now()
 formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
-file_handler = RotatingFileHandler('logs/'+str(now.isoformat())+'.log', maxBytes=10000000)
+file_handler = RotatingFileHandler('logs/'+str(getTimeNow())+'.log', maxBytes=10000000)
 file_handler.setLevel(logging.DEBUG)
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
@@ -34,10 +37,9 @@ screenShotFolder = "screenshots"
 
 def takeScreenshot(driver):
     el = driver.find_element(By.ID, 'zigame')
-    now = datetime.datetime.now()
     if not os.path.exists(screenShotFolder):
         os.makedirs(screenShotFolder)
-    el.screenshot(screenShotFolder + "/screenshot_" + str(now.isoformat()) + ".png")
+    el.screenshot(screenShotFolder + "/screenshot_" + str(getTimeNow()) + ".png")
 
 def autoclick(driver, zg, configs):
     logger.info("Autoclick start")
