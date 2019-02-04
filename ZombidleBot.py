@@ -12,6 +12,23 @@ import ImageAnalyser as ia
 import BotEngine as be
 import LaunchZombidle as lz
 
+import logging
+from logging.handlers import RotatingFileHandler
+
+if not os.path.exists("logs"):
+    os.makedirs("logs")
+
+logger = logging.getLogger("ZombidleBotLogger")
+logger.setLevel(logging.DEBUG)
+now = datetime.datetime.now()
+formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
+file_handler = RotatingFileHandler('logs/'+str(now.isoformat())+'.log', maxBytes=10000000)
+file_handler.setLevel(logging.DEBUG)
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+stream_handler = logging.StreamHandler()
+stream_handler.setLevel(logging.DEBUG)
+logger.addHandler(stream_handler)
 
 screenShotFolder = "screenshots"
 
@@ -23,6 +40,7 @@ def takeScreenshot(driver):
     el.screenshot(screenShotFolder + "/screenshot_" + str(now.isoformat()) + ".png")
 
 def autoclick(driver, zg, configs):
+    logger.info("Autoclick start")
     move = ActionChains(driver)
     move.move_to_element_with_offset(zg, configs.clickPos[0], configs.clickPos[1])
     move.perform()
@@ -35,8 +53,10 @@ def autoclick(driver, zg, configs):
         time.sleep(0.2)
         if i % 20 == 0:
             move.perform()
+    logger.info("Autoclick end")
 
 def click(driver, zg, x, y):
+    logger.info("Click at (" + str(x) + "," + str(y) + ")")
     a = ActionChains(driver)
     a.move_to_element_with_offset(zg, x, y)
     a.click_and_hold()
@@ -65,6 +85,7 @@ def saveArcaneIMG(driver, configs):
     saveScreenPart(driver, "ArcaneIMG.png", configs.arcaneIMGBox)
 
 def takeAction(driver, zg, configs):
+    logger.info("Action")
     arr = np.fromstring(zg.screenshot_as_png, np.uint8)
     img = cv2.imdecode(arr, 0)
 
@@ -83,6 +104,7 @@ def takeAction(driver, zg, configs):
 
 
 def run(driver, it=10):
+    logger.info("Run")
     zg = driver.find_element(By.ID, 'zigame')
     configs = Configs.Configs()
     for i in range(it):
