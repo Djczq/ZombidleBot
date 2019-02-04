@@ -20,5 +20,5 @@ def isInside(boxIn, boxOut):
     return True
 
 def readCharacters(img, box):
-    return pytesseract.image_to_string(img[box[1]:box[3], box[0]:box[2]])
+    return pytesseract.image_to_string(img[box[1]:box[3], box[0]:box[2]]).replace("\n", "").replace("\r", "")
 
