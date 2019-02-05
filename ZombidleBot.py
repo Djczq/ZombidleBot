@@ -15,6 +15,8 @@ import LaunchZombidle as lz
 import logging
 from logging.handlers import RotatingFileHandler
 
+from multiprocessing import Process, Pipe
+
 def getTimeNow():
     return datetime.datetime.now().strftime("%Y.%m.%d_%H.%M.%S.%f")
 
@@ -36,8 +38,7 @@ logger.addHandler(stream_handler)
 
 screenShotFolder = "screenshots"
 
-def takeScreenshot(driver):
-    el = driver.find_element(By.ID, 'zigame')
+def takeScreenshot(el):
     if not os.path.exists(screenShotFolder):
         os.makedirs(screenShotFolder)
     el.screenshot(screenShotFolder + "/screenshot_" + str(getTimeNow()) + ".png")
@@ -104,25 +105,43 @@ def takeAction(driver, zg, configs):
         autoclick(driver, zg, configs)
 
 
-
-def run(driver, it=10):
-    logger.info("Run")
+def botProcess(conn, driver):
+    logger.info("Start bot process")
     zg = driver.find_element(By.ID, 'zigame')
     configs = Configs.Configs()
-    for i in range(it):
-        takeAction(driver, zg, configs)
-        time.sleep(1)
-
-
+    run = True
+    while True:
+        if conn.poll():
+            r = conn.recv()
+            logger.info("Bot process receveid :" + r)
+            if r == "stop":
+                run = False
+            if r == "start":
+                run = True
+            if r == "quit":
+                break
+            if r == "screenshot" or r == "capture" or r == "cap":
+                takeScreenshot(zg)
+        if run:
+            takeAction(driver, zg, configs)
+    logger.info("Stop bot process")
+    conn.close()
 
 def main():
     driver = lz.openBrowser()
     lz.launchZombidle(driver)
-    run(driver)
-    return driver
-
+    parent_conn, child_conn = Pipe()
+    p = Process(target=botProcess, args=(child_conn, driver))
+    p.start()
+    step = ""
+    while step != "quit":
+        step = raw_input("step ? stop start quit\n")
+        if len(step) > 0:
+            parent_conn.send(step)
+    parent_conn.send("quit")
+    p.join()
+    driver.quit()
 
 
 if __name__ == "__main__":
-    # execute only if run as a script
-    driver = main()
+    main()
