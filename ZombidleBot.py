@@ -93,15 +93,15 @@ def takeAction(driver, zg, configs):
     img = cv2.imdecode(arr, 0)
 
     action  = be.determineAction(img, configs)
-    if action[0] == 1 or action[0] == 2 or action[0] == 7 or action[0] == 4:
+    if action[0] == 1:
         click(driver, zg, action[1], action[2])
     if action[0] == 3:
         r = be.processDeal(img, configs)
         click(driver, zg, r[0], r[1])
-    if action[0] == 5:
+    if action[0] == 2:
         r = be.processArcane(img, configs)
         click(driver, zg, r[0], r[1])
-    if action[0] == 6:
+    if action[0] == 4:
         autoclick(driver, zg, configs)
 
 

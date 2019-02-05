@@ -45,13 +45,13 @@ def determineAction(img, configs):
     read = ia.readCharacters(img, configs.dealThanksBox)
     if read == "Thanks!":
         logger.info("Action -- thanks")
-        return (7, configs.dealExitPubPos[0], configs.dealExitPubPos[1])
+        return (1, configs.dealExitPubPos[0], configs.dealExitPubPos[1])
 
     template = cv2.imread("ArcaneIMG.png", 0)
     res = ia.findTemplateInImage(img, template)
     if ia.isInside(res, configs.arcaneIMGBox):
         logger.info("Action -- in arcane")
-        return (5, )
+        return (2, )
 
     template = cv2.imread("Scroll.png", 0)
     res = ia.findTemplateInImage(img, template)
@@ -62,7 +62,7 @@ def determineAction(img, configs):
     res = ia.findTemplateInImage(img, template)
     if ia.isInside(res, configs.notifBox):
         logger.info("Action -- click ChestCollector")
-        return (2, (res[0] + res[2]) / 2, (res[1] + res[3]) / 2)
+        return (1, (res[0] + res[2]) / 2, (res[1] + res[3]) / 2)
 
     read = ia.readCharacters(img, configs.arcaneTimerBox)
     if "A" in read:
@@ -70,14 +70,14 @@ def determineAction(img, configs):
         res = ia.findTemplateInImage(img, template)
         if ia.isInside(res, configs.goToArcaneBox):
             logger.info("Action -- click arcane button")
-            return (4, configs.goToArcanePos[0], configs.goToArcanePos[1])
+            return (1, configs.goToArcanePos[0], configs.goToArcanePos[1])
         else:
             logger.info("Action -- click item tab")
-            return (4, configs.itemTabPos[0], configs.itemTabPos[1])
+            return (1, configs.itemTabPos[0], configs.itemTabPos[1])
 
     if img[configs.backArrowPos[1], configs.backArrowPos[0]] == 211:
         logger.info("Action -- arrow")
-        return (6, )
+        return (4, )
     logger.info("Action -- nothing")
     return (0, )
 
