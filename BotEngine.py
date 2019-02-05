@@ -121,6 +121,7 @@ def processReward(img, configs):
     return configs.reward1Pos
 
 def determineAction(img, configs):
+    logger.info("Action -- Start")
     read = ia.readCharacters(img, configs.dealBox)
     if read == "THE DEAL":
         logger.info("Action -- deal")
