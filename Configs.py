@@ -27,4 +27,13 @@ class Configs:
         self.dealYesPos = (650, 455)
         self.dealExitPubPos = (666, 140)
         self.backArrowPos = (75, 575)
+        self.rewardBox = (441, 75, 518, 91)
+        self.reward1Box = (105, 228, 317, 265)
+        self.reward2Box = (373, 228, 590, 265)
+        self.reward3Box = (640, 228, 860, 265)
+        self.reward1Pos = (200, 475)
+        self.reward2Pos = (475, 475)
+        self.reward3Pos = (750, 475)
+        self.gotDeathCoinBox = (395, 232, 530, 260)
+        self.deahCoinOkPos = (466, 410)
 

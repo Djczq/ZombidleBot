@@ -8,7 +8,7 @@ logger = logging.getLogger("ZombidleBotLogger")
 def processDeal(img, configs):
     read = ia.readCharacters(img, configs.dealContentBox)
     logger.info("Process deal")
-    logger.debug("read : " + read)
+    logger.debug("read deal : " + read)
     if "Skull" in read or "damage" in read or "chest" in read or "minutes" in read:
         return (configs.dealNoPos[0], configs.dealNoPos[1])
     if "sec" in read and "nds" in read:
@@ -35,6 +35,90 @@ def processArcane(img, configs):
         return (configs.nextBoostPos[0], configs.nextBoostPos[1])
     logger.info("Arcane -- quit")
     return (configs.arcaneQuitPos[0], configs.arcaneQuitPos[1])
+
+def findPos(read1, read2, read3, name, configs):
+    if name in read1:
+        return configs.reward1Pos
+    if name in read2:
+        return configs.reward2Pos
+    if name in read3:
+        return configs.reward3Pos
+    return None
+
+def processReward(img, configs):
+    read1 = ia.readCharacters(img, configs.reward1Box)
+    logger.debug("read reward1 : " + read1)
+    read2 = ia.readCharacters(img, configs.reward2Box)
+    logger.debug("read reward2 : " + read2)
+    read3 = ia.readCharacters(img, configs.reward3Box)
+    logger.debug("read reward3 : " + read3)
+    p = findPos(read1, read2, read3, "Chalice", configs)
+    if p != None:
+        logger.info("Chest Reward -- Death Chalice")
+        return p
+
+    p = findPos(read1, read2, read3, "abl", configs)
+    if p != None:
+        logger.info("Chest Reward -- Stone Tablet")
+        return p
+
+    p = findPos(read1, read2, read3, "Ring", configs)
+    if p != None:
+        logger.info("Chest Reward -- Magic Ring")
+        return p
+
+    p = findPos(read1, read2, read3, "ower", configs)
+    if p != None:
+        logger.info("Chest Reward -- Power Potion")
+        return p
+
+    p = findPos(read1, read2, read3, "Collar", configs)
+    if p != None:
+        logger.info("Chest Reward -- King's Collar")
+        return p
+
+    p = findPos(read1, read2, read3, "Bear", configs)
+    if p != None:
+        logger.info("Chest Reward -- Squid's Teddy Bear")
+        return p
+
+    p = findPos(read1, read2, read3, "BC's", configs)
+    if p != None:
+        logger.info("Chest Reward -- Lich's ABC's")
+        return p
+
+    p = findPos(read1, read2, read3, "lagu", configs)
+    if p != None:
+        logger.info("Chest Reward -- Plague in a Bottle")
+        return p
+
+    p = findPos(read1, read2, read3, "ancy", configs)
+    if p != None:
+        logger.info("Chest Reward -- Bat's Fancy Pin")
+        return p
+
+    p = findPos(read1, read2, read3, "hys", configs)
+    if p != None:
+        logger.info("Chest Reward -- Specter's Amethyst")
+        return p
+
+    p = findPos(read1, read2, read3, "Knight", configs)
+    if p != None:
+        logger.info("Chest Reward -- Red Knight's Lipstick")
+        return p
+
+    p = findPos(read1, read2, read3, "Gian", configs)
+    if p != None:
+        logger.info("Chest Reward -- Giant Zombie's Mace")
+        return p
+
+    p = findPos(read1, read2, read3, "Zombie", configs)
+    if p != None:
+        logger.info("Chest Reward -- Zombie Horde's Eye")
+        return p
+
+    logger.info("Chest Reward -- Left Item")
+    return configs.reward1Pos
 
 def determineAction(img, configs):
     read = ia.readCharacters(img, configs.dealBox)
@@ -74,6 +158,17 @@ def determineAction(img, configs):
         else:
             logger.info("Action -- click item tab")
             return (1, configs.itemTabPos[0], configs.itemTabPos[1])
+
+    read = ia.readCharacters(img, configs.rewardBox)
+    if "REWARD" in read:
+        logger.info("Action -- Choose Chest Reward")
+        rewardPos = processReward(img, configs)
+        return (1, rewardPos[0], rewardPos[1])
+
+    read = ia.readCharacters(img, configs.gotDeathCoinBox)
+    if "You got this!" in read:
+        logger.info("Action -- Get Death Coins")
+        return (1, configs.deahCoinOkPos[0], configs.deahCoinOkPos[1])
 
     if img[configs.backArrowPos[1], configs.backArrowPos[0]] == 211:
         logger.info("Action -- arrow")
