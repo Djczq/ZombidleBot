@@ -7,17 +7,29 @@ logger = logging.getLogger("ZombidleBotLogger")
 
 def processDeal(img, configs):
     read = ia.readCharacters(img, configs.dealContentBox)
-    logger.info("Process deal")
     logger.debug("read deal : " + read)
-    if "Skull" in read or "damage" in read or "chest" in read or "minutes" in read:
+    if "ull" in read or "minutes" in read:
+        logger.info("Deal -- Skull x")
         return (configs.dealNoPos[0], configs.dealNoPos[1])
-    if "sec" in read and "nds" in read:
+    if "chest" in read:
+        logger.info("Deal -- Chest")
         return (configs.dealNoPos[0], configs.dealNoPos[1])
-    if "x" in read or "craft" in read or "time" in read:
+    if "amage" in read or ("sec" in read and "nds" in read):
+        logger.info("Deal -- Damage x")
+        return (configs.dealNoPos[0], configs.dealNoPos[1])
+    if "craft" in read or "time" in read:
+        logger.info("Deal -- Skip Craft Time")
         if "free" in read:
             return (configs.dealAwsomePos[0], configs.dealAwsomePos[1])
         else:
             return (configs.dealYesPos[0], configs.dealYesPos[1])
+    if "x" in read:
+        logger.info("Deal -- Diamonds")
+        if "free" in read:
+            return (configs.dealAwsomePos[0], configs.dealAwsomePos[1])
+        else:
+            return (configs.dealYesPos[0], configs.dealYesPos[1])
+    logger.info("Deal -- ??")
     return (configs.dealNoPos[0], configs.dealNoPos[1])
 
 def processArcane(img, configs):
