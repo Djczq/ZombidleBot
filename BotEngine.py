@@ -33,15 +33,15 @@ def processDeal(img, configs):
     return (configs.dealNoPos[0], configs.dealNoPos[1])
 
 def processArcane(img, configs):
-    if img[configs.collectAllPos[1], configs.collectAllPos[0]] > 55:
-        logger.info("Arcane -- collect all")
-        return (configs.collectAllPos[0], configs.collectAllPos[1])
     if img[configs.repeatLastCraftPos[1], configs.repeatLastCraftPos[0]] > 55:
         logger.info("Arcane -- repeat last craft")
         return (configs.repeatLastCraftPos[0], configs.repeatLastCraftPos[1])
     if img[configs.fastGhostCraftPos[1], configs.fastGhostCraftPos[0]] > 55:
         logger.info("Arcane -- fast ghost craft")
         return (configs.fastGhostCraftPos[0], configs.fastGhostCraftPos[1])
+    if img[configs.collectAllPos[1], configs.collectAllPos[0]] > 55:
+        logger.info("Arcane -- collect all")
+        return (configs.collectAllPos[0], configs.collectAllPos[1])
     if img[configs.nextBoostPos[1], configs.nextBoostPos[0]] > 55:
         logger.info("Arcane -- craft boost")
         return (configs.nextBoostPos[0], configs.nextBoostPos[1])
@@ -150,17 +150,6 @@ def determineAction(img, configs):
         logger.info("Action -- in arcane")
         return (2, )
 
-    template = cv2.imread("Scroll.png", 0)
-    res = ia.findTemplateInImage(img, template)
-    if ia.isInside(res, configs.notifBox):
-        logger.info("Action -- click Scroll")
-        return (1, (res[0] + res[2]) / 2, (res[1] + res[3]) / 2)
-    template = cv2.imread("ChestCollector.png", 0)
-    res = ia.findTemplateInImage(img, template)
-    if ia.isInside(res, configs.notifBox):
-        logger.info("Action -- click ChestCollector")
-        return (1, (res[0] + res[2]) / 2, (res[1] + res[3]) / 2)
-
     read = ia.readCharacters(img, configs.arcaneTimerBox)
     if "A" in read:
         template = cv2.imread("GoToArcaneButton.png", 0)
@@ -171,6 +160,17 @@ def determineAction(img, configs):
         else:
             logger.info("Action -- click item tab")
             return (1, configs.itemTabPos[0], configs.itemTabPos[1])
+
+    template = cv2.imread("Scroll.png", 0)
+    res = ia.findTemplateInImage(img, template)
+    if ia.isInside(res, configs.notifBox):
+        logger.info("Action -- click Scroll")
+        return (1, (res[0] + res[2]) / 2, (res[1] + res[3]) / 2)
+    template = cv2.imread("ChestCollector.png", 0)
+    res = ia.findTemplateInImage(img, template)
+    if ia.isInside(res, configs.notifBox):
+        logger.info("Action -- click ChestCollector")
+        return (1, (res[0] + res[2]) / 2, (res[1] + res[3]) / 2)
 
     read = ia.readCharacters(img, configs.rewardBox)
     if "REWARD" in read:
