@@ -5,33 +5,6 @@ import logging
 
 logger = logging.getLogger("ZombidleBotLogger")
 
-def processDeal(img, configs):
-    read = ia.readCharacters(img, configs.dealContentBox)
-    logger.debug("read deal : " + read)
-    if "ull" in read or "minutes" in read:
-        logger.info("Deal -- Skull x")
-        return (configs.dealNoPos[0], configs.dealNoPos[1])
-    if "chest" in read:
-        logger.info("Deal -- Chest")
-        return (configs.dealNoPos[0], configs.dealNoPos[1])
-    if "amage" in read or ("sec" in read and "nds" in read):
-        logger.info("Deal -- Damage x")
-        return (configs.dealNoPos[0], configs.dealNoPos[1])
-    if "craft" in read or "time" in read:
-        logger.info("Deal -- Skip Craft Time")
-        if "free" in read:
-            return (configs.dealAwsomePos[0], configs.dealAwsomePos[1])
-        else:
-            return (configs.dealYesPos[0], configs.dealYesPos[1])
-    if "x" in read:
-        logger.info("Deal -- Diamonds")
-        if "free" in read:
-            return (configs.dealAwsomePos[0], configs.dealAwsomePos[1])
-        else:
-            return (configs.dealYesPos[0], configs.dealYesPos[1])
-    logger.info("Deal -- ??")
-    return (configs.dealNoPos[0], configs.dealNoPos[1])
-
 def processArcane(img, configs):
     if img[configs.repeatLastCraftPos[1], configs.repeatLastCraftPos[0]] > 55:
         logger.info("Arcane -- repeat last craft")
@@ -147,7 +120,34 @@ def determineAction(img, configs):
     read = ia.readCharacters(img, configs.dealBox)
     if read == "THE DEAL":
         logger.info("Action -- deal")
-        return (3, )
+        read = ia.readCharacters(img, configs.dealContentBox)
+        logger.debug("read deal : " + read)
+        if len(read) < 40:
+            logger.info("Deal -- message too short")
+            return (0, )
+        if "ull" in read or "minutes" in read:
+            logger.info("Deal -- Skull x")
+            return (1, configs.dealNoPos[0], configs.dealNoPos[1])
+        if "chest" in read:
+            logger.info("Deal -- Chest")
+            return (1, configs.dealNoPos[0], configs.dealNoPos[1])
+        if "amage" in read or ("sec" in read and "nds" in read):
+            logger.info("Deal -- Damage x")
+            return (1, configs.dealNoPos[0], configs.dealNoPos[1])
+        if "craft" in read or "time" in read:
+            logger.info("Deal -- Skip Craft Time")
+            if "free" in read:
+                return (1, configs.dealAwsomePos[0], configs.dealAwsomePos[1])
+            else:
+                return (1, configs.dealYesPos[0], configs.dealYesPos[1])
+        if "x" in read:
+            logger.info("Deal -- Diamonds")
+            if "free" in read:
+                return (1, configs.dealAwsomePos[0], configs.dealAwsomePos[1])
+            else:
+                return (1, configs.dealYesPos[0], configs.dealYesPos[1])
+        logger.info("Deal -- ??")
+        return (1, configs.dealNoPos[0], configs.dealNoPos[1])
 
     read = ia.readCharacters(img, configs.dealThanksBox)
     if read == "Thanks!":

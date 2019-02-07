@@ -95,9 +95,6 @@ def takeAction(driver, zg, configs):
     action  = be.determineAction(img, configs)
     if action[0] == 1:
         click(driver, zg, action[1], action[2])
-    if action[0] == 3:
-        r = be.processDeal(img, configs)
-        click(driver, zg, r[0], r[1])
     if action[0] == 2:
         r = be.processArcane(img, configs)
         click(driver, zg, r[0], r[1])
