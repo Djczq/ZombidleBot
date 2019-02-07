@@ -48,12 +48,12 @@ def processArcane(img, configs):
     logger.info("Arcane -- quit")
     return (configs.arcaneQuitPos[0], configs.arcaneQuitPos[1])
 
-def findPos(read1, read2, read3, name, configs):
-    if name in read1:
+def findPos(read1, read2, read3, ids, configs):
+    if all(x in read1 for x in ids):
         return configs.reward1Pos
-    if name in read2:
+    if all(x in read2 for x in ids):
         return configs.reward2Pos
-    if name in read3:
+    if all(x in read3 for x in ids):
         return configs.reward3Pos
     return None
 
@@ -64,67 +64,77 @@ def processReward(img, configs):
     logger.debug("read reward2 : " + read2)
     read3 = ia.readCharacters(img, configs.reward3Box)
     logger.debug("read reward3 : " + read3)
-    p = findPos(read1, read2, read3, "Chalice", configs)
+    p = findPos(read1, read2, read3, ["Chalice"], configs)
     if p != None:
         logger.info("Chest Reward -- Death Chalice")
         return p
 
-    p = findPos(read1, read2, read3, "abl", configs)
+    p = findPos(read1, read2, read3, ["cro Sw"], configs)
+    if p != None:
+        logger.info("Chest Reward -- Necro Sword")
+        return p
+
+    p = findPos(read1, read2, read3, ["abl"], configs)
     if p != None:
         logger.info("Chest Reward -- Stone Tablet")
         return p
 
-    p = findPos(read1, read2, read3, "Ring", configs)
+    p = findPos(read1, read2, read3, ["Ring"], configs)
     if p != None:
         logger.info("Chest Reward -- Magic Ring")
         return p
 
-    p = findPos(read1, read2, read3, "ower", configs)
+    p = findPos(read1, read2, read3, ["ower"], configs)
     if p != None:
         logger.info("Chest Reward -- Power Potion")
         return p
 
-    p = findPos(read1, read2, read3, "Collar", configs)
+    p = findPos(read1, read2, read3, ["ow", "x"], configs)
+    if p != None:
+        logger.info("Chest Reward -- Power Axe")
+        return p
+
+    p = findPos(read1, read2, read3, ["Collar"], configs)
     if p != None:
         logger.info("Chest Reward -- King's Collar")
         return p
 
-    p = findPos(read1, read2, read3, "Bear", configs)
+    p = findPos(read1, read2, read3, ["Bear"], configs)
     if p != None:
         logger.info("Chest Reward -- Squid's Teddy Bear")
         return p
 
-    p = findPos(read1, read2, read3, "BC's", configs)
+    p = findPos(read1, read2, read3, ["BC's"], configs)
     if p != None:
         logger.info("Chest Reward -- Lich's ABC's")
         return p
 
-    p = findPos(read1, read2, read3, "lagu", configs)
+    p = findPos(read1, read2, read3, ["lagu"], configs)
     if p != None:
         logger.info("Chest Reward -- Plague in a Bottle")
         return p
 
-    p = findPos(read1, read2, read3, "ancy", configs)
+    p = findPos(read1, read2, read3, ["ancy"], configs)
     if p != None:
         logger.info("Chest Reward -- Bat's Fancy Pin")
         return p
 
-    p = findPos(read1, read2, read3, "hys", configs)
+    p = findPos(read1, read2, read3, ["hys"], configs)
     if p != None:
         logger.info("Chest Reward -- Specter's Amethyst")
         return p
 
-    p = findPos(read1, read2, read3, "Knight", configs)
+    p = findPos(read1, read2, read3, ["Knight"], configs)
     if p != None:
         logger.info("Chest Reward -- Red Knight's Lipstick")
         return p
 
-    p = findPos(read1, read2, read3, "Gian", configs)
+    p = findPos(read1, read2, read3, ["Gian"], configs)
     if p != None:
         logger.info("Chest Reward -- Giant Zombie's Mace")
         return p
 
-    p = findPos(read1, read2, read3, "Zombie", configs)
+    p = findPos(read1, read2, read3, ["Zombie"], configs)
     if p != None:
         logger.info("Chest Reward -- Zombie Horde's Eye")
         return p
