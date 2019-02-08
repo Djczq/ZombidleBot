@@ -193,6 +193,16 @@ def determineAction(img, configs):
         logger.info("Action -- Get Death Coins")
         return (1, configs.deahCoinOkPos[0], configs.deahCoinOkPos[1])
 
+    read = ia.readCharacters(img, configs.dealNothingHappensBox)
+    if "smash that button" in read:
+        logger.info("Action -- Nothing Happens")
+        return (1, configs.dealNothingHappensPos[0], configs.dealNothingHappensPos[1])
+
+    read = ia.readCharacters(img, configs.errorBox)
+    if "Error" in read:
+        logger.info("Action -- Error")
+        return (1, configs.dealNothingHappensPos[0], configs.dealNothingHappensPos[1])
+
     if img[configs.backArrowPos[1], configs.backArrowPos[0]] == 211:
         logger.info("Action -- arrow")
         return (4, )
