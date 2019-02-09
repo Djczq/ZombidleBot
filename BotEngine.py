@@ -201,7 +201,7 @@ def determineAction(img, configs):
     read = ia.readCharacters(img, configs.errorBox)
     if "Error" in read:
         logger.info("Action -- Error")
-        return (1, configs.dealNothingHappensPos[0], configs.dealNothingHappensPos[1])
+        return (1, configs.deahCoinOkPos[0], configs.deahCoinOkPos[1])
 
     if img[configs.backArrowPos[1], configs.backArrowPos[0]] == 211:
         logger.info("Action -- arrow")
