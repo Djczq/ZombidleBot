@@ -6,6 +6,10 @@ import logging
 logger = logging.getLogger("ZombidleBotLogger")
 
 def processArcane(img, settings):
+    logger.debug("arcane img repeat : " + str(img[settings.repeatLastCraftPos[1], settings.repeatLastCraftPos[0]]))
+    logger.debug("arcane img ghost : " + str(img[settings.fastGhostCraftPos[1], settings.fastGhostCraftPos[0]]))
+    logger.debug("arcane img collect : " + str(img[settings.collectAllPos[1], settings.collectAllPos[0]]))
+    logger.debug("arcane img boost : " + str(img[settings.nextBoostPos[1], settings.nextBoostPos[0]]))
     if img[settings.repeatLastCraftPos[1], settings.repeatLastCraftPos[0]] > 55:
         logger.info("Arcane -- repeat last craft")
         return (settings.repeatLastCraftPos[0], settings.repeatLastCraftPos[1])
