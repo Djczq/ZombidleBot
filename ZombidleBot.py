@@ -7,10 +7,10 @@ import pytesseract
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 
-import Configs
-import ImageAnalyser as ia
-import BotEngine as be
-import LaunchZombidle as lz
+import ZombidleBot.Configs as cfg
+import ZombidleBot.ImageAnalyser as ia
+import ZombidleBot.BotEngine as be
+import ZombidleBot.LaunchZombidle as lz
 
 import logging
 from logging.handlers import RotatingFileHandler
@@ -105,7 +105,7 @@ def takeAction(driver, zg, configs):
 def botProcess(conn, driver):
     logger.info("Start bot process")
     zg = driver.find_element(By.ID, 'zigame')
-    configs = Configs.Configs()
+    configs = cfg.Configs()
     run = True
     while True:
         if conn.poll():
