@@ -154,7 +154,7 @@ def determineAction(img, configs):
         logger.info("Action -- thanks")
         return (1, configs.dealExitPubPos[0], configs.dealExitPubPos[1])
 
-    template = cv2.imread("ArcaneIMG.png", 0)
+    template = cv2.imread(configs.ArcaneIMG, 0)
     res = ia.findTemplateInImage(img, template)
     if ia.isInside(res, configs.arcaneIMGBox):
         logger.info("Action -- in arcane")
@@ -162,7 +162,7 @@ def determineAction(img, configs):
 
     read = ia.readCharacters(img, configs.arcaneTimerBox)
     if "A" in read:
-        template = cv2.imread("GoToArcaneButton.png", 0)
+        template = cv2.imread(configs.GoToArcaneButtonIMG, 0)
         res = ia.findTemplateInImage(img, template)
         if ia.isInside(res, configs.goToArcaneBox):
             logger.info("Action -- click arcane button")
@@ -171,12 +171,12 @@ def determineAction(img, configs):
             logger.info("Action -- click item tab")
             return (1, configs.itemTabPos[0], configs.itemTabPos[1])
 
-    template = cv2.imread("Scroll.png", 0)
+    template = cv2.imread(configs.ScrollIMG, 0)
     res = ia.findTemplateInImage(img, template)
     if ia.isInside(res, configs.notifBox):
         logger.info("Action -- click Scroll")
         return (1, (res[0] + res[2]) / 2, (res[1] + res[3]) / 2)
-    template = cv2.imread("ChestCollector.png", 0)
+    template = cv2.imread(configs.ChestCollectorIMG, 0)
     res = ia.findTemplateInImage(img, template)
     if ia.isInside(res, configs.notifBox):
         logger.info("Action -- click ChestCollector")

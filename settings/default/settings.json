@@ -1,0 +1,51 @@
+{
+    "Point":{
+        "examplePoint" : ["width = left-->rigth (x)", "height = top-->bottom (y)"],
+        "notifDeplaSize" : [65, 0],
+        "notifSize": [24, 24],
+        "notifPos": [90, 30],
+        "itemTabPos": [810, 140],
+        "clickPos": [155, 333],
+        "goToArcanePos": [860, 260],
+        "arcaneQuitPos": [914, 46],
+        "nextBoostPos": [196, 130],
+        "collectAllPos": [600, 130],
+        "fastGhostCraftPos": [600, 130],
+        "repeatLastCraftPos": [812, 130],
+        "dealNothingHappensPos": [515, 475],
+        "dealAwsomePos": [777, 455],
+        "dealNoPos": [486, 455],
+        "dealYesPos": [650, 455],
+        "dealExitPubPos": [666, 140],
+        "backArrowPos": [75, 575],
+        "reward1Pos": [200, 475],
+        "reward2Pos": [475, 475],
+        "reward3Pos": [750, 475],
+        "deathCoinOkPos": [466, 410]
+    },
+    "Box":{
+        "exampleBox" : ["top-left width", "top-left height", "bottom-rigth width", "bottom-rigth height"],
+        "notifBox" : [74, 9, 440, 72],
+        "goToArcaneBox" : [824, 234, 900, 287],
+        "arcaneIMGBox" : [745, 12, 770, 80],
+        "arcaneTimerBox" : [834, 66, 938, 92],
+        "dealBox" : [560, 80, 700, 110],
+        "errorBox" : [320, 210, 605, 357],
+        "dealThanksBox" : [440, 108, 516, 129],
+        "dealContentBox" : [410, 165, 852, 376],
+        "dealAwsomeBox" : [732, 445, 828, 467],
+        "dealNothingHappensBox" : [318, 440, 474, 500],
+        "rewardBox" : [441, 75, 518, 91],
+        "reward1Box" : [105, 228, 317, 265],
+        "reward2Box" : [373, 228, 590, 265],
+        "reward3Box" : [640, 228, 860, 265],
+        "gotDeathCoinBox" : [395, 232, 530, 260]
+    },
+    "IMG":{
+        "Arcane" : "ArcaneIMG.png",
+        "ChestCollector" : "ChestCollector.png",
+        "GoToArcaneButton" : "GoToArcaneButton.png",
+        "Scroll" : "Scroll.png"
+    }
+}
+
