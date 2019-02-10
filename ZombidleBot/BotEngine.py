@@ -2,28 +2,29 @@ import cv2
 import pytesseract
 import ImageAnalyser as ia
 import logging
+from settings.Point import Point
 
 logger = logging.getLogger("ZombidleBotLogger")
 
 def processArcane(img, settings):
-    logger.debug("arcane img repeat : " + str(img[settings.repeatLastCraftPos[1], settings.repeatLastCraftPos[0]]))
-    logger.debug("arcane img ghost : " + str(img[settings.fastGhostCraftPos[1], settings.fastGhostCraftPos[0]]))
-    logger.debug("arcane img collect : " + str(img[settings.collectAllPos[1], settings.collectAllPos[0]]))
-    logger.debug("arcane img boost : " + str(img[settings.nextBoostPos[1], settings.nextBoostPos[0]]))
-    if img[settings.repeatLastCraftPos[1], settings.repeatLastCraftPos[0]] > 55:
+    logger.debug("arcane img repeat : " + str(img[settings.repeatLastCraftPos.height, settings.repeatLastCraftPos.width]))
+    logger.debug("arcane img ghost : " + str(img[settings.fastGhostCraftPos.height, settings.fastGhostCraftPos.width]))
+    logger.debug("arcane img collect : " + str(img[settings.collectAllPos.height, settings.collectAllPos.width]))
+    logger.debug("arcane img boost : " + str(img[settings.nextBoostPos.height, settings.nextBoostPos.width]))
+    if img[settings.repeatLastCraftPos.height, settings.repeatLastCraftPos.width] > 55:
         logger.info("Arcane -- repeat last craft")
-        return (settings.repeatLastCraftPos[0], settings.repeatLastCraftPos[1])
-    if img[settings.fastGhostCraftPos[1], settings.fastGhostCraftPos[0]] > 55:
+        return settings.repeatLastCraftPos
+    if img[settings.fastGhostCraftPos.height, settings.fastGhostCraftPos.width] > 55:
         logger.info("Arcane -- fast ghost craft")
-        return (settings.fastGhostCraftPos[0], settings.fastGhostCraftPos[1])
-    if img[settings.collectAllPos[1], settings.collectAllPos[0]] > 55:
+        return settings.fastGhostCraftPos
+    if img[settings.collectAllPos.height, settings.collectAllPos.width] > 55:
         logger.info("Arcane -- collect all")
-        return (settings.collectAllPos[0], settings.collectAllPos[1])
-    if img[settings.nextBoostPos[1], settings.nextBoostPos[0]] > 55:
+        return settings.collectAllPos
+    if img[settings.nextBoostPos.height, settings.nextBoostPos.width] > 55:
         logger.info("Arcane -- craft boost")
-        return (settings.nextBoostPos[0], settings.nextBoostPos[1])
+        return settings.nextBoostPos
     logger.info("Arcane -- quit")
-    return (settings.arcaneQuitPos[0], settings.arcaneQuitPos[1])
+    return settings.arcaneQuitPos
 
 def findPos(read1, read2, read3, ids, settings):
     if all(x in read1 for x in ids):
@@ -131,32 +132,32 @@ def determineAction(img, settings):
             return (0, )
         if "ull" in read or "minutes" in read:
             logger.info("Deal -- Skull x")
-            return (1, settings.dealNoPos[0], settings.dealNoPos[1])
+            return (1, settings.dealNoPos)
         if "chest" in read:
             logger.info("Deal -- Chest")
-            return (1, settings.dealNoPos[0], settings.dealNoPos[1])
+            return (1, settings.dealNoPos)
         if "amage" in read or ("sec" in read and "nds" in read):
             logger.info("Deal -- Damage x")
-            return (1, settings.dealNoPos[0], settings.dealNoPos[1])
+            return (1, settings.dealNoPos)
         if "craft" in read or "time" in read:
             logger.info("Deal -- Skip Craft Time")
             if "free" in read:
-                return (1, settings.dealAwsomePos[0], settings.dealAwsomePos[1])
+                return (1, settings.dealAwsomePos)
             else:
-                return (1, settings.dealYesPos[0], settings.dealYesPos[1])
+                return (1, settings.dealYesPos)
         if "x" in read:
             logger.info("Deal -- Diamonds")
             if "free" in read:
-                return (1, settings.dealAwsomePos[0], settings.dealAwsomePos[1])
+                return (1, settings.dealAwsomePos)
             else:
-                return (1, settings.dealYesPos[0], settings.dealYesPos[1])
+                return (1, settings.dealYesPos)
         logger.info("Deal -- ??")
-        return (1, settings.dealNoPos[0], settings.dealNoPos[1])
+        return (1, settings.dealNoPos)
 
     read = ia.readCharacters(img, settings.dealThanksBox)
     if read == "Thanks!":
         logger.info("Action -- thanks")
-        return (1, settings.dealExitPubPos[0], settings.dealExitPubPos[1])
+        return (1, settings.dealExitPubPos)
 
     template = cv2.imread(settings.ArcaneIMG, 0)
     res = ia.findTemplateInImage(img, template)
@@ -170,44 +171,44 @@ def determineAction(img, settings):
         res = ia.findTemplateInImage(img, template)
         if ia.isInside(res, settings.goToArcaneBox):
             logger.info("Action -- click arcane button")
-            return (1, settings.goToArcanePos[0], settings.goToArcanePos[1])
+            return (1, settings.goToArcanePos)
         else:
             logger.info("Action -- click item tab")
-            return (1, settings.itemTabPos[0], settings.itemTabPos[1])
+            return (1, settings.itemTabPos)
 
     template = cv2.imread(settings.ScrollIMG, 0)
     res = ia.findTemplateInImage(img, template)
     if ia.isInside(res, settings.notifBox):
         logger.info("Action -- click Scroll")
-        return (1, (res[0] + res[2]) / 2, (res[1] + res[3]) / 2)
+        return (1, Point((res[0] + res[2]) / 2, (res[1] + res[3]) / 2))
     template = cv2.imread(settings.ChestCollectorIMG, 0)
     res = ia.findTemplateInImage(img, template)
     if ia.isInside(res, settings.notifBox):
         logger.info("Action -- click ChestCollector")
-        return (1, (res[0] + res[2]) / 2, (res[1] + res[3]) / 2)
+        return (1, Point((res[0] + res[2]) / 2, (res[1] + res[3]) / 2))
 
     read = ia.readCharacters(img, settings.rewardBox)
     if "REWARD" in read:
         logger.info("Action -- Choose Chest Reward")
         rewardPos = processReward(img, settings)
-        return (1, rewardPos[0], rewardPos[1])
+        return (1, rewardPos)
 
     read = ia.readCharacters(img, settings.gotDeathCoinBox)
     if "You got this!" in read:
         logger.info("Action -- Get Death Coins")
-        return (1, settings.deahCoinOkPos[0], settings.deahCoinOkPos[1])
+        return (1, settings.deahCoinOkPos)
 
     read = ia.readCharacters(img, settings.dealNothingHappensBox)
     if "smash that button" in read:
         logger.info("Action -- Nothing Happens")
-        return (1, settings.dealNothingHappensPos[0], settings.dealNothingHappensPos[1])
+        return (1, settings.dealNothingHappensPos)
 
     read = ia.readCharacters(img, settings.errorBox)
     if "Error" in read:
         logger.info("Action -- Error")
-        return (1, settings.deahCoinOkPos[0], settings.deahCoinOkPos[1])
+        return (1, settings.deahCoinOkPos)
 
-    if img[settings.backArrowPos[1], settings.backArrowPos[0]] == 211:
+    if img[settings.backArrowPos.height, settings.backArrowPos.width] == 211:
         logger.info("Action -- arrow")
         return (4, )
     logger.info("Action -- nothing")

@@ -46,7 +46,7 @@ def takeScreenshot(el):
 def autoclick(driver, zg, settings):
     logger.info("Autoclick start")
     move = ActionChains(driver)
-    move.move_to_element_with_offset(zg, settings.clickPos[0], settings.clickPos[1])
+    move.move_to_element_with_offset(zg, settings.clickPos.width, settings.clickPos.height)
     move.perform()
     click = ActionChains(driver)
     click.click_and_hold()
@@ -59,10 +59,10 @@ def autoclick(driver, zg, settings):
             move.perform()
     logger.info("Autoclick end")
 
-def click(driver, zg, x, y):
-    logger.info("Click at (" + str(x) + "," + str(y) + ")")
+def click(driver, zg, pos):
+    logger.info("Click at " + str(pos))
     a = ActionChains(driver)
-    a.move_to_element_with_offset(zg, x, y)
+    a.move_to_element_with_offset(zg, pos.width, pos.height)
     a.click_and_hold()
     a.pause(1)
     a.release()
@@ -72,8 +72,8 @@ def saveItemNotif(driver, name, settings, pos=1):
     el = driver.find_element(By.ID, 'zigame')
     arr = np.fromstring(el.screenshot_as_png, np.uint8)
     img = cv2.imdecode(arr, 1)
-    crop_img = img[settings.notifPos[1] : settings.notifPos[1] + settings.notifSize[1],
-        settings.notifPos[0] + settings.notifDeplaSize[0] * (pos - 1) : settings.notifPos[0] + settings.notifSize[0] + settings.notifDeplaSize[0] * (pos - 1)].copy()
+    crop_img = img[settings.notifPos.height : settings.notifPos.height + settings.notifSize.height,
+        settings.notifPos.width + settings.notifDeplaSize.width * (pos - 1) : settings.notifPos.width + settings.notifSize.width + settings.notifDeplaSize.width * (pos - 1)].copy()
     cv2.imwrite(name, crop_img)
 
 def saveScreenPart(driver, name, box):
@@ -94,10 +94,10 @@ def takeAction(driver, zg, settings):
 
     action  = be.determineAction(img, settings)
     if action[0] == 1:
-        click(driver, zg, action[1], action[2])
+        click(driver, zg, action[1])
     if action[0] == 2:
         r = be.processArcane(img, settings)
-        click(driver, zg, r[0], r[1])
+        click(driver, zg, r)
     if action[0] == 4:
         autoclick(driver, zg, settings)
 
