@@ -7,7 +7,7 @@ import pytesseract
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 
-import ZombidleBot.Configs as cfg
+import ZombidleBot.settings.Settings as bs
 import ZombidleBot.ImageAnalyser as ia
 import ZombidleBot.BotEngine as be
 import ZombidleBot.LaunchZombidle as lz
@@ -43,10 +43,10 @@ def takeScreenshot(el):
         os.makedirs(screenShotFolder)
     el.screenshot(screenShotFolder + "/screenshot_" + str(getTimeNow()) + ".png")
 
-def autoclick(driver, zg, configs):
+def autoclick(driver, zg, settings):
     logger.info("Autoclick start")
     move = ActionChains(driver)
-    move.move_to_element_with_offset(zg, configs.clickPos[0], configs.clickPos[1])
+    move.move_to_element_with_offset(zg, settings.clickPos[0], settings.clickPos[1])
     move.perform()
     click = ActionChains(driver)
     click.click_and_hold()
@@ -68,12 +68,12 @@ def click(driver, zg, x, y):
     a.release()
     a.perform()
 
-def saveItemNotif(driver, name, configs, pos=1):
+def saveItemNotif(driver, name, settings, pos=1):
     el = driver.find_element(By.ID, 'zigame')
     arr = np.fromstring(el.screenshot_as_png, np.uint8)
     img = cv2.imdecode(arr, 1)
-    crop_img = img[configs.notifPos[1] : configs.notifPos[1] + configs.notifSize[1],
-        configs.notifPos[0] + configs.notifDeplaSize[0] * (pos - 1) : configs.notifPos[0] + configs.notifSize[0] + configs.notifDeplaSize[0] * (pos - 1)].copy()
+    crop_img = img[settings.notifPos[1] : settings.notifPos[1] + settings.notifSize[1],
+        settings.notifPos[0] + settings.notifDeplaSize[0] * (pos - 1) : settings.notifPos[0] + settings.notifSize[0] + settings.notifDeplaSize[0] * (pos - 1)].copy()
     cv2.imwrite(name, crop_img)
 
 def saveScreenPart(driver, name, box):
@@ -82,30 +82,30 @@ def saveScreenPart(driver, name, box):
     img = cv2.imdecode(arr, 1)
     cv2.imwrite(name, img[box[1]:box[3], box[0]:box[2]])
 
-def saveGoToArcaneButton(driver, configs):
-    saveScreenPart(driver, "GoToArcaneButton.png", configs.goToArcaneBox)
+def saveGoToArcaneButton(driver, settings):
+    saveScreenPart(driver, "GoToArcaneButton.png", settings.goToArcaneBox)
 
-def saveArcaneIMG(driver, configs):
-    saveScreenPart(driver, "ArcaneIMG.png", configs.arcaneIMGBox)
+def saveArcaneIMG(driver, settings):
+    saveScreenPart(driver, "ArcaneIMG.png", settings.arcaneIMGBox)
 
-def takeAction(driver, zg, configs):
+def takeAction(driver, zg, settings):
     arr = np.fromstring(zg.screenshot_as_png, np.uint8)
     img = cv2.imdecode(arr, 0)
 
-    action  = be.determineAction(img, configs)
+    action  = be.determineAction(img, settings)
     if action[0] == 1:
         click(driver, zg, action[1], action[2])
     if action[0] == 2:
-        r = be.processArcane(img, configs)
+        r = be.processArcane(img, settings)
         click(driver, zg, r[0], r[1])
     if action[0] == 4:
-        autoclick(driver, zg, configs)
+        autoclick(driver, zg, settings)
 
 
 def botProcess(conn, driver):
     logger.info("Start bot process")
     zg = driver.find_element(By.ID, 'zigame')
-    configs = cfg.Configs()
+    settings = bs.Settings()
     run = True
     while True:
         if conn.poll():
@@ -120,7 +120,7 @@ def botProcess(conn, driver):
             if r == "screenshot" or r == "capture" or r == "cap":
                 takeScreenshot(zg)
         if run:
-            takeAction(driver, zg, configs)
+            takeAction(driver, zg, settings)
     logger.info("Stop bot process")
     conn.close()
 

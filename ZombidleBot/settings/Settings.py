@@ -1,6 +1,6 @@
 import json
 
-class Configs:
+class Settings:
     # coord : (width = left-->rigth (x), heigh = top-->bottom (y))
     # box : (top-left width, top-left heigh, bottom-rigth width, bottom-rigth heigh)
     def __init__(self):
