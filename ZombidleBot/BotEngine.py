@@ -161,7 +161,7 @@ def determineAction(img, settings):
 
     template = cv2.imread(settings.ArcaneIMG, 0)
     res = ia.findTemplateInImage(img, template)
-    if ia.isInside(res, settings.arcaneIMGBox):
+    if settings.arcaneIMGBox.contains(res):
         logger.info("Action -- in arcane")
         return (2, )
 
@@ -169,7 +169,7 @@ def determineAction(img, settings):
     if "A" in read:
         template = cv2.imread(settings.GoToArcaneButtonIMG, 0)
         res = ia.findTemplateInImage(img, template)
-        if ia.isInside(res, settings.goToArcaneBox):
+        if settings.goToArcaneBox.contains(res):
             logger.info("Action -- click arcane button")
             return (1, settings.goToArcanePos)
         else:
@@ -178,14 +178,14 @@ def determineAction(img, settings):
 
     template = cv2.imread(settings.ScrollIMG, 0)
     res = ia.findTemplateInImage(img, template)
-    if ia.isInside(res, settings.notifBox):
+    if settings.notifBox.contains(res):
         logger.info("Action -- click Scroll")
-        return (1, Point((res[0] + res[2]) / 2, (res[1] + res[3]) / 2))
+        return (1, res.getCenterPoint())
     template = cv2.imread(settings.ChestCollectorIMG, 0)
     res = ia.findTemplateInImage(img, template)
-    if ia.isInside(res, settings.notifBox):
+    if settings.notifBox.contains(res):
         logger.info("Action -- click ChestCollector")
-        return (1, Point((res[0] + res[2]) / 2, (res[1] + res[3]) / 2))
+        return (1, res.getCenterPoint())
 
     read = ia.readCharacters(img, settings.rewardBox)
     if "REWARD" in read:
