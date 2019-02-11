@@ -34,6 +34,7 @@ class Settings:
         self.reward2Pos = Point.fromArray(data["Point"]["reward2Pos"])
         self.reward3Pos = Point.fromArray(data["Point"]["reward3Pos"])
         self.deahCoinOkPos = Point.fromArray(data["Point"]["deathCoinOkPos"])
+        self.dealTryAgainOffset = Point.fromArray(data["Point"]["dealTryAgainOffset"])
 
         self.gotDeathCoinBox = Rectangle.fromArray(data["Box"]["gotDeathCoinBox"])
         self.notifBox = Rectangle.fromArray(data["Box"]["notifBox"])

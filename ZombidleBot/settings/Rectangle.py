@@ -17,8 +17,8 @@ class Rectangle:
         hmax = max(height1, height2)
         return Rectangle(Point(wmin, hmin), Point(wmax, hmax))
 
-    def offset(self, width_off, height_off):
-        return Rectangle(self.topleft.add(width_off, height_off), self.botrigth.add(width_off, height_off))
+    def offset(self, off):
+        return Rectangle(self.topleft.add(off), self.botrigth.add(off))
 
     def contains(self, other):
         """check if other is inside self"""

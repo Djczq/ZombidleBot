@@ -17,6 +17,7 @@
         "dealNoPos": [486, 455],
         "dealYesPos": [650, 455],
         "dealExitPubPos": [666, 140],
+        "dealTryAgainOffset": [-160, 0],
         "backArrowPos": [75, 575],
         "reward1Pos": [200, 475],
         "reward2Pos": [475, 475],

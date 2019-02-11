@@ -154,6 +154,13 @@ def determineAction(img, settings):
         logger.info("Deal -- ??")
         return (1, settings.dealNoPos)
 
+    read = ia.readCharacters(img, settings.dealBox.offset(settings.dealTryAgainOffset))
+    if read == "THE DEAL":
+        logger.info("Action -- deal (after try again)")
+        read = ia.readCharacters(img, settings.dealContentBox.offset(settings.dealTryAgainOffset))
+        logger.debug("read deal : " + read)
+        return (1, settings.dealYesPos.add(settings.dealTryAgainOffset))
+
     read = ia.readCharacters(img, settings.dealThanksBox)
     if read == "Thanks!":
         logger.info("Action -- thanks")

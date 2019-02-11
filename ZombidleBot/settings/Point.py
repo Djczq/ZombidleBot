@@ -9,8 +9,8 @@ class Point:
     def fromArray(cls, arr):
         return cls(arr[0], arr[1])
 
-    def add(self, width, height):
-        return Point(self.width + width, self.height + height)
+    def add(self, off):
+        return Point(self.width + off.width, self.height + off.height)
 
     def asArray(self):
         return [self.width, self.height]
