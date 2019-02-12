@@ -2,8 +2,8 @@
     "Point":{
         "examplePoint" : ["width = left-->rigth (x)", "height = top-->bottom (y)"],
         "notifDeplaSize" : [65, 0],
-        "notifSize": [24, 24],
-        "notifPos": [90, 30],
+        "notifSize": [30, 28],
+        "notifPos": [85, 28],
         "itemTabPos": [810, 140],
         "clickPos": [155, 333],
         "goToArcanePos": [860, 260],
