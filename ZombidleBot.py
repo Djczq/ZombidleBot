@@ -112,7 +112,8 @@ def main():
     p.start()
     step = ""
     while step != "quit":
-        step = raw_input("step ? stop start quit\n")
+        print("step ? stop start quit")
+        step = input()
         if len(step) > 0:
             parent_conn.send(step)
     parent_conn.send("quit")

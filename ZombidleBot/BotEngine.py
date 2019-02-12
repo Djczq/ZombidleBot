@@ -1,8 +1,8 @@
 import cv2
 import pytesseract
-import ImageAnalyser as ia
+from . import ImageAnalyser as ia
 import logging
-from settings.Point import Point
+from .settings.Point import Point
 
 logger = logging.getLogger("ZombidleBotLogger")
 

@@ -1,6 +1,6 @@
 import cv2
 import pytesseract
-from settings.Rectangle import Rectangle
+from .settings.Rectangle import Rectangle
 
 def findTemplateInImage(img, template):
     res = cv2.matchTemplate(img, template, cv2.TM_CCOEFF)

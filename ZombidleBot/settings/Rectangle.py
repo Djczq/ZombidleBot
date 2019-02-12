@@ -1,4 +1,4 @@
-from Point import Point
+from .Point import Point
 
 class Rectangle:
     def __init__(self, topleft, botrigth):

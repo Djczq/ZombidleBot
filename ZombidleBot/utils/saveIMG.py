@@ -3,7 +3,7 @@ import cv2
 import sys
 
 if len(sys.argv) != 4:
-    print "wrong number of arguments"
+    print("wrong number of arguments")
     sys.exit(1)
 
 settings = bs.Settings()
@@ -30,7 +30,7 @@ if sys.argv[2] == "aIMG":
     crop_img = img[settings.arcaneIMGBox.getSliceNP()]
 
 
-print name
+print(name)
 
 if name != None:
     cv2.imwrite(name, crop_img)

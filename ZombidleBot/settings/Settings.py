@@ -1,6 +1,6 @@
 import json
-from Point import Point
-from Rectangle import Rectangle
+from .Point import Point
+from .Rectangle import Rectangle
 
 class Settings:
     # coord : (width = left-->rigth (x), heigh = top-->bottom (y))
