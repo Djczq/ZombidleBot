@@ -68,26 +68,6 @@ def click(driver, zg, pos):
     a.release()
     a.perform()
 
-def saveItemNotif(driver, name, settings, pos=1):
-    el = driver.find_element(By.ID, 'zigame')
-    arr = np.fromstring(el.screenshot_as_png, np.uint8)
-    img = cv2.imdecode(arr, 1)
-    crop_img = img[settings.notifPos.height : settings.notifPos.height + settings.notifSize.height,
-        settings.notifPos.width + settings.notifDeplaSize.width * (pos - 1) : settings.notifPos.width + settings.notifSize.width + settings.notifDeplaSize.width * (pos - 1)].copy()
-    cv2.imwrite(name, crop_img)
-
-def saveScreenPart(driver, name, box):
-    el = driver.find_element(By.ID, 'zigame')
-    arr = np.fromstring(el.screenshot_as_png, np.uint8)
-    img = cv2.imdecode(arr, 1)
-    cv2.imwrite(name, img[box[1]:box[3], box[0]:box[2]])
-
-def saveGoToArcaneButton(driver, settings):
-    saveScreenPart(driver, "GoToArcaneButton.png", settings.goToArcaneBox)
-
-def saveArcaneIMG(driver, settings):
-    saveScreenPart(driver, "ArcaneIMG.png", settings.arcaneIMGBox)
-
 def takeAction(driver, zg, settings):
     arr = np.fromstring(zg.screenshot_as_png, np.uint8)
     img = cv2.imdecode(arr, 0)
