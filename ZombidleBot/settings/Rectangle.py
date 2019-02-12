@@ -35,5 +35,8 @@ class Rectangle:
     def getCenterPoint(self):
         return Point((self.topleft.width + self.botrigth.width) / 2, (self.topleft.height + self.botrigth.height) / 2)
 
+    def getSliceNP(self):
+        return (slice(self.topleft.height, self.botrigth.height), slice(self.topleft.width, self.botrigth.width))
+
     def __str__(self):
         return "(" + str(self.topleft) + "," + str(self.botrigth) + ")"

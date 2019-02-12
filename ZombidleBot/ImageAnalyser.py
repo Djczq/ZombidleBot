@@ -9,5 +9,5 @@ def findTemplateInImage(img, template):
     return Rectangle.fromValues(max_loc[0], max_loc[1], max_loc[0] + w, max_loc[1] + h)
 
 def readCharacters(img, box):
-    return pytesseract.image_to_string(img[box.topleft.height:box.botrigth.height, box.topleft.width:box.botrigth.width]).replace("\n", "").replace("\r", "")
+    return pytesseract.image_to_string(img[box.getSliceNP()]).replace("\n", "").replace("\r", "")
 
