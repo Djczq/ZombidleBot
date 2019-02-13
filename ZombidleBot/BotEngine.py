@@ -174,6 +174,7 @@ def determineAction(img, settings):
 
     read = ia.readCharacters(img, settings.arcaneTimerBox)
     if "A" in read:
+        logger.debug("read timer : " + read)
         template = cv2.imread(settings.GoToArcaneButtonIMG, 0)
         res = ia.findTemplateInImage(img, template)
         if settings.goToArcaneBox.contains(res):
