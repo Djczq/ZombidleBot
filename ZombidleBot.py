@@ -75,9 +75,6 @@ def takeAction(driver, zg, settings):
     action  = be.determineAction(img, settings)
     if action[0] == 1:
         click(driver, zg, action[1])
-    if action[0] == 2:
-        r = be.processArcane(img, settings)
-        click(driver, zg, r)
     if action[0] == 4:
         autoclick(driver, zg, settings)
 

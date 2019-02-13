@@ -170,7 +170,7 @@ def determineAction(img, settings):
     res = ia.findTemplateInImage(img, template)
     if settings.arcaneIMGBox.contains(res):
         logger.info("Action -- in arcane")
-        return (2, )
+        return (1, processArcane(img, settings))
 
     read = ia.readCharacters(img, settings.arcaneTimerBox)
     if "A" in read:
