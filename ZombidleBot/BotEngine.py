@@ -6,25 +6,64 @@ from .settings.Point import Point
 
 logger = logging.getLogger("ZombidleBotLogger")
 
+def checkShard(img, settings):
+    read = ia.readCharacters(img, settings.shardTileBox)
+    logger.debug("read shard tile : " + read)
+    if "SHARD" in read:
+        return None
+    else:
+        read = ia.readCharacters(img, settings.shardEnterBox)
+        logger.debug("read shard menu entry : " + read)
+        if "SHARDS" in read:
+            logger.debug("arcane img enter shard : " + str(img[settings.shardEnterRedPos.height, settings.shardEnterRedPos.width]))
+            if img[settings.shardEnterRedPos.height, settings.shardEnterRedPos.width] > 55:
+                logger.info("Arcane -- enter shard menu")
+                return settings.shardEnterRedPos
+            else:
+                return None
+        else:
+            return None
+    return None
+
 def processArcane(img, settings):
-    logger.debug("arcane img repeat : " + str(img[settings.repeatLastCraftPos.height, settings.repeatLastCraftPos.width]))
-    logger.debug("arcane img ghost : " + str(img[settings.fastGhostCraftPos.height, settings.fastGhostCraftPos.width]))
-    logger.debug("arcane img collect : " + str(img[settings.collectAllPos.height, settings.collectAllPos.width]))
-    logger.debug("arcane img boost : " + str(img[settings.nextBoostPos.height, settings.nextBoostPos.width]))
-    if img[settings.repeatLastCraftPos.height, settings.repeatLastCraftPos.width] > 55:
-        logger.info("Arcane -- repeat last craft")
-        return settings.repeatLastCraftPos
-    if img[settings.fastGhostCraftPos.height, settings.fastGhostCraftPos.width] > 55:
-        logger.info("Arcane -- fast ghost craft")
-        return settings.fastGhostCraftPos
-    if img[settings.collectAllPos.height, settings.collectAllPos.width] > 55:
+    pr = img[settings.repeatLastCraftPos.height, settings.repeatLastCraftPos.width]
+    pg = img[settings.fastGhostCraftPos.height, settings.fastGhostCraftPos.width]
+    pc = img[settings.collectAllPos.height, settings.collectAllPos.width]
+    pb = img[settings.nextBoostPos.height, settings.nextBoostPos.width]
+    logger.debug("arcane img repeat : " + str(pr))
+    logger.debug("arcane img ghost : " + str(pg))
+    logger.debug("arcane img collect : " + str(pc))
+    logger.debug("arcane img boost : " + str(pb))
+    read = ia.readCharacters(img, settings.shardNoteBox)
+    if "build one shard" in read:
+        logger.debug("read shard note : " + read)
+        logger.info("Arcane -- craft splinter or shard")
+        return settings.shardCraftPos
+    if pr == 61:
+        r = checkShard(img, settings)
+        if r != None:
+            return r
+        else:
+            logger.info("Arcane -- repeat last craft")
+            return settings.repeatLastCraftPos
+    if pg == 61:
+        r = checkShard(img, settings)
+        if r != None:
+            return r
+        else:
+            logger.info("Arcane -- fast ghost craft")
+            return settings.fastGhostCraftPos
+    if pc == 61:
         logger.info("Arcane -- collect all")
         return settings.collectAllPos
-    if img[settings.nextBoostPos.height, settings.nextBoostPos.width] > 55:
+    if pb == 61:
         logger.info("Arcane -- craft boost")
         return settings.nextBoostPos
-    logger.info("Arcane -- quit")
-    return settings.arcaneQuitPos
+    if pr == 31 and pg == 31 and pc == 31 and pb == 31:
+        logger.info("Arcane -- quit")
+        return settings.arcaneQuitPos
+    logger.info("Arcane -- wait")
+    return None
 
 def findPos(read1, read2, read3, ids, settings):
     if all(x in read1 for x in ids):
@@ -170,7 +209,11 @@ def determineAction(img, settings):
     res = ia.findTemplateInImage(img, template)
     if settings.arcaneIMGBox.contains(res):
         logger.info("Action -- in arcane")
-        return (1, processArcane(img, settings))
+        arcanePos = processArcane(img, settings)
+        if arcanePos == None:
+            return (0, )
+        else:
+            return (1, arcanePos)
 
     read = ia.readCharacters(img, settings.arcaneTimerBox)
     if "A" in read:

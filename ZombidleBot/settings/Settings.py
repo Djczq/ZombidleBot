@@ -35,6 +35,8 @@ class Settings:
         self.reward3Pos = Point.fromArray(data["Point"]["reward3Pos"])
         self.deahCoinOkPos = Point.fromArray(data["Point"]["deathCoinOkPos"])
         self.dealTryAgainOffset = Point.fromArray(data["Point"]["dealTryAgainOffset"])
+        self.shardEnterRedPos = Point.fromArray(data["Point"]["shardEnterRedPos"])
+        self.shardCraftPos = Point.fromArray(data["Point"]["shardCraftPos"])
 
         self.gotDeathCoinBox = Rectangle.fromArray(data["Box"]["gotDeathCoinBox"])
         self.notifBox = Rectangle.fromArray(data["Box"]["notifBox"])
@@ -51,6 +53,9 @@ class Settings:
         self.dealAwsomeBox = Rectangle.fromArray(data["Box"]["dealAwsomeBox"])
         self.dealNothingHappensBox = Rectangle.fromArray(data["Box"]["dealNothingHappensBox"])
         self.arcaneTimerBox = Rectangle.fromArray(data["Box"]["arcaneTimerBox"])
+        self.shardEnterBox = Rectangle.fromArray(data["Box"]["shardEnterBox"])
+        self.shardTileBox = Rectangle.fromArray(data["Box"]["shardTileBox"])
+        self.shardNoteBox = Rectangle.fromArray(data["Box"]["shardNoteBox"])
 
         self.ArcaneIMG = 'settings/' + profile + '/' + data["IMG"]["Arcane"]
         self.ChestCollectorIMG = 'settings/' + profile + '/' + data["IMG"]["ChestCollector"]
