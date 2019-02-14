@@ -31,7 +31,7 @@
         "notifBox" : [74, 9, 440, 72],
         "goToArcaneBox" : [824, 234, 900, 287],
         "arcaneIMGBox" : [745, 12, 770, 80],
-        "arcaneTimerBox" : [834, 66, 938, 92],
+        "arcaneTimerBox" : [834, 44, 938, 92],
         "dealBox" : [560, 80, 700, 110],
         "errorBox" : [320, 210, 605, 357],
         "dealThanksBox" : [440, 108, 516, 129],
