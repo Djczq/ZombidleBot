@@ -12,10 +12,18 @@ import ZombidleBot.ImageAnalyser as ia
 import ZombidleBot.BotEngine as be
 import ZombidleBot.LaunchZombidle as lz
 
+import importlib
+
 import logging
 from logging.handlers import RotatingFileHandler
 
 from multiprocessing import Process, Pipe
+
+def reloadModules():
+    importlib.reload(ia)
+    importlib.reload(be)
+    importlib.reload(lz)
+    be.reloadModules()
 
 def getTimeNow():
     return datetime.datetime.now().strftime("%Y.%m.%d_%H.%M.%S.%f")
@@ -96,6 +104,9 @@ def botProcess(conn, driver):
                 break
             if r == "screenshot" or r == "capture" or r == "cap":
                 takeScreenshot(zg)
+            if r == "reload":
+                reloadModules()
+                settings = bs.Settings()
         if run:
             takeAction(driver, zg, settings)
     logger.info("Stop bot process")

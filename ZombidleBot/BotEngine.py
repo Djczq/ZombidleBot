@@ -1,10 +1,13 @@
 import cv2
 import pytesseract
 from . import ImageAnalyser as ia
-import logging
+import logging, importlib
 from .settings.Point import Point
 
 logger = logging.getLogger("ZombidleBotLogger")
+
+def reloadModules():
+    importlib.reload(ia)
 
 def checkShard(img, settings):
     read = ia.readCharacters(img, settings.shardTileBox)
