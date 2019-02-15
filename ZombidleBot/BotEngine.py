@@ -242,7 +242,8 @@ def determineAction(img, settings):
         return (1, res.getCenterPoint())
 
     read = ia.readCharacters(img, settings.rewardBox)
-    if "REWARD" in read:
+    logger.debug("read reward box : " + read)
+    if "REWARD" in read or "Things" in read:
         logger.info("Action -- Choose Chest Reward")
         rewardPos = processReward(img, settings)
         return (1, rewardPos)

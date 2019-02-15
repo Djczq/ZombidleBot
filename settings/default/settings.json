@@ -38,7 +38,7 @@
         "dealContentBox" : [410, 165, 852, 376],
         "dealAwsomeBox" : [732, 445, 828, 467],
         "dealNothingHappensBox" : [318, 440, 474, 500],
-        "rewardBox" : [441, 75, 518, 91],
+        "rewardBox" : [400, 75, 558, 91],
         "reward1Box" : [105, 228, 317, 265],
         "reward2Box" : [373, 228, 590, 265],
         "reward3Box" : [640, 228, 860, 265],
