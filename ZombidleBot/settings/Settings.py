@@ -33,7 +33,7 @@ class Settings:
         self.reward1Pos = Point.fromArray(data["Point"]["reward1Pos"])
         self.reward2Pos = Point.fromArray(data["Point"]["reward2Pos"])
         self.reward3Pos = Point.fromArray(data["Point"]["reward3Pos"])
-        self.deahCoinOkPos = Point.fromArray(data["Point"]["deathCoinOkPos"])
+        self.okPos = Point.fromArray(data["Point"]["okPos"])
         self.dealTryAgainOffset = Point.fromArray(data["Point"]["dealTryAgainOffset"])
         self.shardEnterRedPos = Point.fromArray(data["Point"]["shardEnterRedPos"])
         self.shardCraftPos = Point.fromArray(data["Point"]["shardCraftPos"])

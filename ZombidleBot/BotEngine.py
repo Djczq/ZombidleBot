@@ -251,7 +251,7 @@ def determineAction(img, settings):
     read = ia.readCharacters(img, settings.gotDeathCoinBox)
     if "You got this!" in read:
         logger.info("Action -- Get Death Coins")
-        return (1, settings.deahCoinOkPos)
+        return (1, settings.okPos)
 
     read = ia.readCharacters(img, settings.dealNothingHappensBox)
     if "smash that button" in read:
@@ -261,7 +261,7 @@ def determineAction(img, settings):
     read = ia.readCharacters(img, settings.errorBox)
     if "Error" in read:
         logger.info("Action -- Error")
-        return (1, settings.deahCoinOkPos)
+        return (1, settings.okPos)
 
     if img[settings.backArrowPos.height, settings.backArrowPos.width] == 211:
         logger.info("Action -- arrow")

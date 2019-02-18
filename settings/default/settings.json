@@ -24,7 +24,7 @@
         "reward3Pos": [750, 475],
         "shardEnterRedPos": [190, 440],
         "shardCraftPos": [770, 480],
-        "deathCoinOkPos": [466, 410]
+        "okPos": [466, 410]
     },
     "Box":{
         "exampleBox" : ["top-left width", "top-left height", "bottom-rigth width", "bottom-rigth height"],
