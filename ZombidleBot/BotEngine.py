@@ -263,9 +263,12 @@ def determineAction(img, settings):
         logger.info("Action -- Error")
         return (1, settings.okPos)
 
-    if img[settings.backArrowPos.height, settings.backArrowPos.width] == 211:
-        logger.info("Action -- arrow")
+    read = ia.readCharacters(img, settings.HPBox)
+    logger.debug("read HP box : " + read)
+    if "HP" in read:
+        logger.info("Action -- Can click")
         return (4, )
+
     logger.info("Action -- nothing")
     return (0, )
 
