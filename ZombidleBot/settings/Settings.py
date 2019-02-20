@@ -35,7 +35,6 @@ class Settings:
         self.okPos = Point.fromArray(data["Point"]["okPos"])
         self.dealTryAgainOffset = Point.fromArray(data["Point"]["dealTryAgainOffset"])
         self.shardEnterRedPos = Point.fromArray(data["Point"]["shardEnterRedPos"])
-        self.shardCraftPos = Point.fromArray(data["Point"]["shardCraftPos"])
 
         self.gotDeathCoinBox = Rectangle.fromArray(data["Box"]["gotDeathCoinBox"])
         self.notifBox = Rectangle.fromArray(data["Box"]["notifBox"])
@@ -55,6 +54,7 @@ class Settings:
         self.arcaneTimerBox = Rectangle.fromArray(data["Box"]["arcaneTimerBox"])
         self.shardEnterBox = Rectangle.fromArray(data["Box"]["shardEnterBox"])
         self.shardTileBox = Rectangle.fromArray(data["Box"]["shardTileBox"])
+        self.shardCraftBox = Rectangle.fromArray(data["Box"]["shardCraftBox"])
         self.shardNoteBox = Rectangle.fromArray(data["Box"]["shardNoteBox"])
 
         self.ArcaneIMG = 'settings/' + profile + '/' + data["IMG"]["Arcane"]

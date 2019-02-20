@@ -22,7 +22,6 @@
         "reward2Pos": [475, 475],
         "reward3Pos": [750, 475],
         "shardEnterRedPos": [190, 440],
-        "shardCraftPos": [770, 480],
         "okPos": [466, 410]
     },
     "Box":{
@@ -44,6 +43,7 @@
         "HPBox" : [143, 602, 183, 625],
         "shardTileBox" : [100, 245, 170, 270],
         "shardEnterBox" : [90, 425, 190, 450],
+        "shardCraftBox" : [763, 469, 827, 486],
         "shardNoteBox" : [288, 14, 666, 68],
         "gotDeathCoinBox" : [395, 232, 530, 260]
     },

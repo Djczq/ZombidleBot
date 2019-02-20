@@ -40,31 +40,35 @@ def processArcane(img, settings):
     read = ia.readCharacters(img, settings.shardNoteBox)
     if "build one shard" in read:
         logger.debug("read shard note : " + read)
-        logger.info("Arcane -- craft splinter or shard")
-        return settings.shardCraftPos
-    if pr == 61:
-        r = checkShard(img, settings)
-        if r != None:
-            return r
-        else:
-            logger.info("Arcane -- repeat last craft")
-            return settings.repeatLastCraftPos
-    if pg == 61:
-        r = checkShard(img, settings)
-        if r != None:
-            return r
-        else:
-            logger.info("Arcane -- fast ghost craft")
-            return settings.fastGhostCraftPos
-    if pc == 61:
-        logger.info("Arcane -- collect all")
-        return settings.collectAllPos
-    if pb == 61:
-        logger.info("Arcane -- craft boost")
-        return settings.nextBoostPos
-    if pr == 31 and pg == 31 and pc == 31 and pb == 31:
-        logger.info("Arcane -- quit")
-        return settings.arcaneQuitPos
+        read = ia.readCharacters(img, settings.shardCraftBox)
+        if "RAF" in read:
+            logger.debug("read shard box : " + read)
+            logger.info("Arcane -- craft splinter or shard")
+            return settings.shardCraftBox.getCenterPoint()
+    else:
+        if pr == 61:
+            r = checkShard(img, settings)
+            if r != None:
+                return r
+            else:
+                logger.info("Arcane -- repeat last craft")
+                return settings.repeatLastCraftPos
+        if pg == 61:
+            r = checkShard(img, settings)
+            if r != None:
+                return r
+            else:
+                logger.info("Arcane -- fast ghost craft")
+                return settings.fastGhostCraftPos
+        if pc == 61:
+            logger.info("Arcane -- collect all")
+            return settings.collectAllPos
+        if pb == 61:
+            logger.info("Arcane -- craft boost")
+            return settings.nextBoostPos
+        if pr == 31 and pg == 31 and pc == 31 and pb == 31:
+            logger.info("Arcane -- quit")
+            return settings.arcaneQuitPos
     logger.info("Arcane -- wait")
     return None
 
