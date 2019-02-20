@@ -1,16 +1,14 @@
-import io
+import io, sys
 import os, datetime, time
 import numpy as np
 import cv2
 import pytesseract
 
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
-
 import ZombidleBot.settings.Settings as bs
 import ZombidleBot.ImageAnalyser as ia
 import ZombidleBot.BotEngine as be
 import ZombidleBot.LaunchZombidle as lz
+import ZombidleBot.Hook as hk
 
 import importlib
 
@@ -23,6 +21,8 @@ def reloadModules():
     importlib.reload(ia)
     importlib.reload(be)
     importlib.reload(lz)
+    importlib.reload(bs)
+    importlib.reload(hk)
     be.reloadModules()
 
 def getTimeNow():
@@ -44,53 +44,21 @@ stream_handler.setLevel(logging.DEBUG)
 stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
 
-screenShotFolder = "screenshots"
-
-def takeScreenshot(el):
-    if not os.path.exists(screenShotFolder):
-        os.makedirs(screenShotFolder)
-    el.screenshot(screenShotFolder + "/screenshot_" + str(getTimeNow()) + ".png")
-
-def autoclick(driver, zg, settings):
-    logger.info("Autoclick start")
-    move = ActionChains(driver)
-    move.move_to_element_with_offset(zg, settings.clickPos.width, settings.clickPos.height)
-    move.perform()
-    click = ActionChains(driver)
-    click.click_and_hold()
-    click.pause(0.1)
-    click.release()
-    for i in range(100):
-        click.perform()
-        time.sleep(0.2)
-        if i % 20 == 0:
-            move.perform()
-    logger.info("Autoclick end")
-
-def click(driver, zg, pos):
-    logger.info("Click at " + str(pos))
-    a = ActionChains(driver)
-    a.move_to_element_with_offset(zg, pos.width, pos.height)
-    a.click_and_hold()
-    a.pause(1)
-    a.release()
-    a.perform()
-
-def takeAction(driver, zg, settings):
-    arr = np.fromstring(zg.screenshot_as_png, np.uint8)
+def takeAction(hook, settings):
+    arr = np.fromstring(hook.zg.screenshot_as_png, np.uint8)
     img = cv2.imdecode(arr, 0)
 
-    action  = be.determineAction(img, settings)
+    action = be.determineAction(img, settings)
     if action[0] == 1:
-        click(driver, zg, action[1])
+        hook.click(action[1])
     if action[0] == 4:
-        autoclick(driver, zg, settings)
-
+        hook.press0()
+        hook.autoclick(settings)
 
 def botProcess(conn, driver):
     logger.info("Start bot process")
-    zg = driver.find_element(By.ID, 'zigame')
     settings = bs.Settings()
+    hook = hk.SeleniumHook(driver)
     run = True
     while True:
         if conn.poll():
@@ -103,12 +71,16 @@ def botProcess(conn, driver):
             if r == "quit":
                 break
             if r == "screenshot" or r == "capture" or r == "cap":
-                takeScreenshot(zg)
+                hook.takeScreenshot()
             if r == "reload":
                 reloadModules()
                 settings = bs.Settings()
+                hook = hk.SeleniumHook(driver)
         if run:
-            takeAction(driver, zg, settings)
+            try:
+                takeAction(hook, settings)
+            except:
+                logger.warn(sys.exc_info())
     logger.info("Stop bot process")
     conn.close()
 
