@@ -44,13 +44,19 @@ stream_handler.setLevel(logging.DEBUG)
 stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
 
-def takeAction(hook, settings):
+def takeAction(hook, settings, mode):
     arr = np.fromstring(hook.zg.screenshot_as_png, np.uint8)
     img = cv2.imdecode(arr, 0)
 
-    action = be.determineAction(img, settings)
+    action = be.determineAction(img, settings, mode)
     if action[0] == 1:
-        hook.click(action[1])
+        for i in range(1, len(action)):
+            hook.click(action[i])
+    if action[0] == 2:
+        for i in range(1, len(action)):
+            hook.click(action[i])
+        hook.press0()
+        hook.autoclick(settings)
     if action[0] == 4:
         hook.press0()
         hook.autoclick(settings)
@@ -60,6 +66,7 @@ def botProcess(conn, driver):
     settings = bs.Settings()
     hook = hk.SeleniumHook(driver)
     run = True
+    mode = 0
     while True:
         if conn.poll():
             r = conn.recv()
@@ -68,6 +75,10 @@ def botProcess(conn, driver):
                 run = False
             if r == "start":
                 run = True
+            splited = r.split()
+            if len(splited) == 2:
+                mode = int(splited[1])
+                logger.info("change mode to " + str(mode))
             if r == "quit":
                 break
             if r == "screenshot" or r == "capture" or r == "cap":
@@ -78,7 +89,7 @@ def botProcess(conn, driver):
                 hook = hk.SeleniumHook(driver)
         if run:
             try:
-                takeAction(hook, settings)
+                takeAction(hook, settings, mode)
             except:
                 logger.warn(sys.exc_info())
     logger.info("Stop bot process")

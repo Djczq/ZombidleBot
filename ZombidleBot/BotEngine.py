@@ -166,7 +166,91 @@ def processReward(img, settings):
     logger.info("Chest Reward -- Left Item")
     return settings.reward1Pos
 
-def determineAction(img, settings):
+
+def findRigthPanelCursorPos(img, settings):
+    return ia.findCenterSameColorHor(img, settings.rigthPanelBarBox, 5, 211, 220)
+
+def findMinionTilesPos(img, settings):
+    return ia.findCenterSameColorHor(img, settings.rigthPanelMinionBox, 5, 19, 25)
+
+
+def levelUpMinions(img, settings):
+    pm = img[settings.minionTabPos.height, settings.minionTabPos.width]
+    logger.debug("img minion tab : " + str(pm))
+    if len(findRigthPanelCursorPos(img, settings)) != 2:
+        return None
+    if pm != 29:
+        return (1, settings.minionTabPos)
+    r = [2]
+    l = findMinionTilesPos(img, settings)
+    king = False
+    carl = False
+    read = ia.readCharacters(img, settings.multipleBuyBox)
+    logger.debug("read multiple buy box : " + read)
+    if "MAX" not in read:
+        r.append(settings.multipleBuyBox.getCenterPoint())
+        logger.debug("append multiple buy")
+        r[0] = 1
+        return r
+    for i in range(0, len(l), 2):
+        p = l[i]
+        if p.width >= settings.rigthPanelMinionBox.topleft.width - 2 and l[i+1] >= settings.minionTileWidth - settings.minionPortraitWidth:
+            box = Rectangle.fromValues(p.width + l[i+1] - settings.minionTileWidth + settings.minionPortraitWidth, settings.minionNameBot, p.width + l[i+1], settings.minionNameTop)
+            readname = ia.readCharacters(img, box)
+            logger.debug("read minion name box 1 : " + readname)
+            if "Tomb" in readname:
+                king = True
+            if "CARL" in readname:
+                carl = True
+
+            box = Rectangle.fromValues(p.width + 10, settings.levelUpBot, p.width + settings.levelUpWidth, settings.levelUpTop)
+            point = box.getCenterPoint()
+            pixel = img[settings.levelUpRedHeight, int(point.width)]
+            logger.debug("pos level up 1 : " + str(point.width) + " " + str(settings.levelUpRedHeight))
+            logger.debug("img level up 1 : " + str(pixel))
+            if pixel == 29:
+                continue
+            if pixel == 53 or pixel == 25:
+                r.append(point)
+            else:
+                r.append(Point(p.width + l[i+1] / 2, settings.buyHeight))
+            continue
+
+        if p.width + l[i+1] >= settings.rigthPanelMinionBox.botrigth.width - 2 and l[i+1] >= settings.levelUpWidth:
+            box = Rectangle.fromValues(p.width + 10, settings.levelUpBot, p.width + settings.levelUpWidth, settings.levelUpTop)
+            read = ia.readCharacters(img, box)
+            logger.debug("read level up box 3 : " + read)
+            continue
+            if "LEVEL" in read:
+                r.append(box.getCenterPoint())
+            else:
+                r.append(Point(p.width + l[i+1] / 2, settings.buyHeight))
+                r.append(settings.rigthPanelRigthArrowPos)
+                r[0] = 1
+
+    logger.debug("carl " + str(carl))
+    logger.debug("king " + str(king))
+    if carl != True or king != True:
+        r[0] = 1
+        if carl == True:
+            r.append(settings.rigthPanelLeftArrowPos)
+            logger.debug("append left")
+        if king == True:
+            r.append(settings.rigthPanelRigthArrowPos)
+            logger.debug("append right")
+    if carl != True and king != True:
+        r.append(settings.rigthPanelRigthArrowPos)
+        logger.debug("append right")
+        r[0] = 1
+
+    if len(r) > 1:
+        return r
+    else:
+        return None
+
+
+def determineAction(img, settings, mode = 0):
+    logger.debug("mode : " + str(mode))
     logger.info("Action -- Start")
     read = ia.readCharacters(img, settings.dealBox)
     if read == "THE DEAL":
@@ -266,6 +350,12 @@ def determineAction(img, settings):
     if "Error" in read:
         logger.info("Action -- Error")
         return (1, settings.okPos)
+
+    if mode == 1:
+        logger.debug("level up minions")
+        r = levelUpMinions(img, settings)
+        if r != None:
+            return r
 
     read = ia.readCharacters(img, settings.HPBox)
     logger.debug("read HP box : " + read)

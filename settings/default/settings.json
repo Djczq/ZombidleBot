@@ -22,6 +22,9 @@
         "reward2Pos": [475, 475],
         "reward3Pos": [750, 475],
         "shardEnterRedPos": [190, 440],
+        "rigthPanelRigthArrowPos": [937, 620],
+        "rigthPanelLeftArrowPos": [495, 620],
+        "minionTabPos": [560, 130],
         "okPos": [466, 410]
     },
     "Box":{
@@ -45,7 +48,21 @@
         "shardEnterBox" : [90, 425, 190, 450],
         "shardCraftBox" : [763, 469, 827, 486],
         "shardNoteBox" : [288, 14, 666, 68],
+        "rigthPanelBarBox" : [510, 620, 920, 621],
+        "rigthPanelMinionBox" : [471, 400, 960, 401],
+        "multipleBuyBox" : [850, 259, 900, 276],
         "gotDeathCoinBox" : [395, 232, 530, 260]
+    },
+    "Value":{
+	"levelUpTop" : 559,
+	"levelUpBot" : 580,
+	"levelUpWidth" : 82,
+	"levelUpRedHeight" : 586,
+	"buyHeight" : 506,
+	"minionNameTop" : 305,
+	"minionNameBot" : 346,
+	"minionTileWidth" : 204,
+	"minionPortraitWidth" : 85
     },
     "IMG":{
         "Arcane" : "ArcaneIMG.png",

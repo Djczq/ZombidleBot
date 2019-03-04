@@ -35,6 +35,9 @@ class Settings:
         self.okPos = Point.fromArray(data["Point"]["okPos"])
         self.dealTryAgainOffset = Point.fromArray(data["Point"]["dealTryAgainOffset"])
         self.shardEnterRedPos = Point.fromArray(data["Point"]["shardEnterRedPos"])
+        self.rigthPanelRigthArrowPos = Point.fromArray(data["Point"]["rigthPanelRigthArrowPos"])
+        self.rigthPanelLeftArrowPos = Point.fromArray(data["Point"]["rigthPanelLeftArrowPos"])
+        self.minionTabPos = Point.fromArray(data["Point"]["minionTabPos"])
 
         self.gotDeathCoinBox = Rectangle.fromArray(data["Box"]["gotDeathCoinBox"])
         self.notifBox = Rectangle.fromArray(data["Box"]["notifBox"])
@@ -56,6 +59,19 @@ class Settings:
         self.shardTileBox = Rectangle.fromArray(data["Box"]["shardTileBox"])
         self.shardCraftBox = Rectangle.fromArray(data["Box"]["shardCraftBox"])
         self.shardNoteBox = Rectangle.fromArray(data["Box"]["shardNoteBox"])
+        self.rigthPanelBarBox = Rectangle.fromArray(data["Box"]["rigthPanelBarBox"])
+        self.rigthPanelMinionBox = Rectangle.fromArray(data["Box"]["rigthPanelMinionBox"])
+        self.multipleBuyBox = Rectangle.fromArray(data["Box"]["multipleBuyBox"])
+
+        self.minionNameTop = data["Value"]["minionNameTop"]
+        self.minionNameBot = data["Value"]["minionNameBot"]
+        self.minionPortraitWidth = data["Value"]["minionPortraitWidth"]
+        self.minionTileWidth = data["Value"]["minionTileWidth"]
+        self.levelUpTop = data["Value"]["levelUpTop"]
+        self.levelUpBot = data["Value"]["levelUpBot"]
+        self.levelUpRedHeight = data["Value"]["levelUpRedHeight"]
+        self.levelUpWidth = data["Value"]["levelUpWidth"]
+        self.buyHeight = data["Value"]["buyHeight"]
 
         self.ArcaneIMG = 'settings/' + profile + '/' + data["IMG"]["Arcane"]
         self.ChestCollectorIMG = 'settings/' + profile + '/' + data["IMG"]["ChestCollector"]
