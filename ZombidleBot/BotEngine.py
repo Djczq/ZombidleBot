@@ -3,6 +3,7 @@ import pytesseract
 from . import ImageAnalyser as ia
 import logging, importlib
 from .settings.Point import Point
+from .settings.Rectangle import Rectangle
 
 logger = logging.getLogger("ZombidleBotLogger")
 
