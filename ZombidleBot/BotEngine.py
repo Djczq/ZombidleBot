@@ -6,6 +6,7 @@ from .settings.Point import Point
 from .settings.Rectangle import Rectangle
 
 logger = logging.getLogger("ZombidleBotLogger")
+timesReadArea = 0
 
 def reloadModules():
     importlib.reload(ia)
@@ -168,6 +169,43 @@ def processReward(img, settings):
     return settings.reward1Pos
 
 
+def usePortal(img, settings):
+    global timesReadArea
+    read = ia.readCharacters(img, settings.errorBox)
+    logger.debug("read ask box : " + read)
+    if "Warp" in read:
+        logger.info("Use Portal -- Accept warp")
+        return (1, settings.yesPos)
+    if "Reset your game" in read:
+        logger.info("Use Portal -- Accept reset")
+        return (1, settings.yesPos)
+
+    read = ia.readCharacters(img, settings.resetGameBox)
+    logger.debug("read reset game box : " + read)
+    if "medals, Items and Hell" in read:
+        logger.info("Use Portal -- Use Time Portal")
+        return (1, settings.useTimePortalPos)
+
+    if timesReadArea < 3:
+        return None
+
+    p = img[settings.rigthPanelBarPos.height, settings.rigthPanelBarPos.width]
+    logger.debug("img rigth Panel Bar : " + str(p))
+    if p == 187:
+        p2 = img[settings.quickPortalPos.height, settings.quickPortalPos.width]
+        logger.debug("img quick portal : " + str(p2))
+        if p2 == 79:
+            logger.info("Use Portal -- Quick Portal")
+            return (1, settings.quickPortalPos)
+        else:
+            logger.info("Use Portal -- Reset Read Area Timer")
+            timesReadArea = 0
+            return (0, )
+    if p == 17:
+        logger.info("Use Portal -- click Rigth Panel Rigth Arrow")
+        return (1, settings.rigthPanelRigthArrowPos)
+    return None
+
 def findRigthPanelCursorPos(img, settings):
     return ia.findCenterSameColorHor(img, settings.rigthPanelBarBox, 5, 211, 220)
 
@@ -252,7 +290,17 @@ def levelUpMinions(img, settings):
 
 def determineAction(img, settings, mode = 0):
     logger.debug("mode : " + str(mode))
+    global timesReadArea
     logger.info("Action -- Start")
+    read = ia.readCharacters(img, settings.areaBox)
+    logger.debug("read area box : " + read)
+    if "Area" in read:
+        timesReadArea += 1
+    else:
+        timesReadArea = 0
+
+    logger.debug("timesReadArea : " + str(timesReadArea))
+
     read = ia.readCharacters(img, settings.dealBox)
     if read == "THE DEAL":
         logger.info("Action -- deal")
@@ -337,6 +385,12 @@ def determineAction(img, settings, mode = 0):
         rewardPos = processReward(img, settings)
         return (1, rewardPos)
 
+    if mode == 2 or mode == 3:
+        r = usePortal(img, settings)
+        if r != None:
+            return r
+
+
     read = ia.readCharacters(img, settings.gotDeathCoinBox)
     if "You got this!" in read:
         logger.info("Action -- Get Death Coins")
@@ -352,7 +406,7 @@ def determineAction(img, settings, mode = 0):
         logger.info("Action -- Error")
         return (1, settings.okPos)
 
-    if mode == 1:
+    if mode == 1 or mode == 3:
         logger.debug("level up minions")
         r = levelUpMinions(img, settings)
         if r != None:
