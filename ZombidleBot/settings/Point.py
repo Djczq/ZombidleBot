@@ -20,3 +20,8 @@ class Point:
 
     def __str__(self):
         return "<width: " + str(self.width) + ", height: " + str(self.height) + ">"
+
+    def getTupleNP(self):
+        return (self.height, self.width)
+
+
