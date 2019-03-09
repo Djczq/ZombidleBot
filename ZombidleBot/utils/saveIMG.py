@@ -15,18 +15,18 @@ pos = int(sys.argv[1])
 name = None
 
 if sys.argv[2] == "cc":
-    name = settings.ChestCollectorIMG
+    name = settings.ChestCollectorPath
     crop_img = img[settings.notifPos.height : settings.notifPos.height + settings.notifSize.height,
         settings.notifPos.width + settings.notifDeplaSize.width * (pos - 1) : settings.notifPos.width + settings.notifSize.width + settings.notifDeplaSize.width * (pos - 1)].copy()
 if sys.argv[2] == "sc":
-    name = settings.ScrollIMG
+    name = settings.ScrollPath
     crop_img = img[settings.notifPos.height : settings.notifPos.height + settings.notifSize.height,
         settings.notifPos.width + settings.notifDeplaSize.width * (pos - 1) : settings.notifPos.width + settings.notifSize.width + settings.notifDeplaSize.width * (pos - 1)].copy()
 if sys.argv[2] == "ab":
-    name = settings.GoToArcaneButtonIMG
+    name = settings.GoToArcaneButtonPath
     crop_img = img[settings.goToArcaneBox.getSliceNP()]
 if sys.argv[2] == "aIMG":
-    name = settings.ArcaneIMG
+    name = settings.ArcanePath
     crop_img = img[settings.arcaneIMGBox.getSliceNP()]
 
 

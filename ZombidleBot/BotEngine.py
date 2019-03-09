@@ -1,4 +1,3 @@
-import cv2
 import pytesseract
 from . import ImageAnalyser as ia
 import logging, importlib
@@ -345,8 +344,7 @@ def determineAction(img, settings, mode = 0):
         logger.info("Action -- thanks")
         return (1, settings.dealExitPubPos)
 
-    template = cv2.imread(settings.ArcaneIMG, 0)
-    res = ia.findTemplateInImage(img, template)
+    res = ia.findTemplateInImage(img, settings.ArcaneIMG)
     if settings.arcaneIMGBox.contains(res):
         logger.info("Action -- in arcane")
         arcanePos = processArcane(img, settings)
@@ -358,8 +356,7 @@ def determineAction(img, settings, mode = 0):
     read = ia.readCharacters(img, settings.arcaneTimerBox)
     if "READY" in read:
         logger.debug("read timer : " + read)
-        template = cv2.imread(settings.GoToArcaneButtonIMG, 0)
-        res = ia.findTemplateInImage(img, template)
+        res = ia.findTemplateInImage(img, settings.GoToArcaneButtonIMG)
         if settings.goToArcaneBox.contains(res):
             logger.info("Action -- click arcane button")
             return (1, settings.goToArcanePos)
@@ -367,13 +364,11 @@ def determineAction(img, settings, mode = 0):
             logger.info("Action -- click item tab")
             return (1, settings.itemTabPos)
 
-    template = cv2.imread(settings.ScrollIMG, 0)
-    res = ia.findTemplateInImage(img, template)
+    res = ia.findTemplateInImage(img, settings.ScrollIMG)
     if settings.notifBox.contains(res):
         logger.info("Action -- click Scroll")
         return (1, res.getCenterPoint())
-    template = cv2.imread(settings.ChestCollectorIMG, 0)
-    res = ia.findTemplateInImage(img, template)
+    res = ia.findTemplateInImage(img, settings.ChestCollectorIMG)
     if settings.notifBox.contains(res):
         logger.info("Action -- click ChestCollector")
         return (1, res.getCenterPoint())

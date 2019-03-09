@@ -1,4 +1,5 @@
 import json
+import cv2
 from .Point import Point
 from .Rectangle import Rectangle
 
@@ -79,7 +80,12 @@ class Settings:
         self.levelUpWidth = data["Value"]["levelUpWidth"]
         self.buyHeight = data["Value"]["buyHeight"]
 
-        self.ArcaneIMG = 'settings/' + profile + '/' + data["IMG"]["Arcane"]
-        self.ChestCollectorIMG = 'settings/' + profile + '/' + data["IMG"]["ChestCollector"]
-        self.GoToArcaneButtonIMG = 'settings/' + profile + '/' + data["IMG"]["GoToArcaneButton"]
-        self.ScrollIMG = 'settings/' + profile + '/' + data["IMG"]["Scroll"]
+        self.ArcanePath = 'settings/' + profile + '/' + data["IMG"]["Arcane"]
+        self.ChestCollectorPath = 'settings/' + profile + '/' + data["IMG"]["ChestCollector"]
+        self.GoToArcaneButtonPath = 'settings/' + profile + '/' + data["IMG"]["GoToArcaneButton"]
+        self.ScrollPath = 'settings/' + profile + '/' + data["IMG"]["Scroll"]
+
+        self.ArcaneIMG = cv2.imread(self.ArcanePath, 0)
+        self.ChestCollectorIMG = cv2.imread(self.ChestCollectorPath, 0)
+        self.GoToArcaneButtonIMG = cv2.imread(self.GoToArcaneButtonPath, 0)
+        self.ScrollIMG = cv2.imread(self.ScrollPath, 0)
