@@ -1,4 +1,5 @@
 import pytesseract
+import numpy as np
 from . import ImageAnalyser as ia
 import logging, importlib
 from .settings.Point import Point
@@ -291,6 +292,9 @@ def determineAction(img, settings, mode = 0):
     logger.debug("mode : " + str(mode))
     global timesReadArea
     logger.info("Action -- Start")
+    if np.array_equal(img[settings.extendRPanelCrossBox.getSliceNP()], settings.extendRPanelCrossIMG):
+        logger.info("Action -- open right panel")
+        return (1, settings.extendRPanelCrossBox.getCenterPoint())
     read = ia.readCharacters(img, settings.areaBox)
     logger.debug("read area box : " + read)
     if "Area" in read:

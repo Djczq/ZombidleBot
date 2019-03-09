@@ -57,6 +57,7 @@
         "rigthPanelBarBox" : [510, 620, 920, 621],
         "rigthPanelMinionBox" : [471, 400, 960, 401],
         "multipleBuyBox" : [850, 259, 900, 276],
+        "extendRPanelCrossBox" : [718, 16, 736, 33],
         "gotDeathCoinBox" : [395, 232, 530, 260]
     },
     "Value":{
@@ -74,6 +75,7 @@
         "Arcane" : "ArcaneIMG.png",
         "ChestCollector" : "ChestCollector.png",
         "GoToArcaneButton" : "GoToArcaneButton.png",
+        "extendRPanelCross" : "extendRPanelCross.png",
         "Scroll" : "Scroll.png"
     }
 }

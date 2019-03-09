@@ -69,6 +69,7 @@ class Settings:
         self.rigthPanelBarBox = Rectangle.fromArray(data["Box"]["rigthPanelBarBox"])
         self.rigthPanelMinionBox = Rectangle.fromArray(data["Box"]["rigthPanelMinionBox"])
         self.multipleBuyBox = Rectangle.fromArray(data["Box"]["multipleBuyBox"])
+        self.extendRPanelCrossBox = Rectangle.fromArray(data["Box"]["extendRPanelCrossBox"])
 
         self.minionNameTop = data["Value"]["minionNameTop"]
         self.minionNameBot = data["Value"]["minionNameBot"]
@@ -84,8 +85,10 @@ class Settings:
         self.ChestCollectorPath = 'settings/' + profile + '/' + data["IMG"]["ChestCollector"]
         self.GoToArcaneButtonPath = 'settings/' + profile + '/' + data["IMG"]["GoToArcaneButton"]
         self.ScrollPath = 'settings/' + profile + '/' + data["IMG"]["Scroll"]
+        self.extendRPanelCrossPath = 'settings/' + profile + '/' + data["IMG"]["extendRPanelCross"]
 
         self.ArcaneIMG = cv2.imread(self.ArcanePath, 0)
         self.ChestCollectorIMG = cv2.imread(self.ChestCollectorPath, 0)
         self.GoToArcaneButtonIMG = cv2.imread(self.GoToArcaneButtonPath, 0)
         self.ScrollIMG = cv2.imread(self.ScrollPath, 0)
+        self.extendRPanelCrossIMG = cv2.imread(self.extendRPanelCrossPath, 0)
