@@ -216,7 +216,8 @@ def findMinionTilesPos(img, settings):
 def levelUpMinions(img, settings):
     pm = img[settings.minionTabPos.height, settings.minionTabPos.width]
     logger.debug("img minion tab : " + str(pm))
-    if len(findRigthPanelCursorPos(img, settings)) != 2:
+    rplist = findRigthPanelCursorPos(img, settings)
+    if len(rplist) != 2:
         return None
     if pm != 29:
         return (1, settings.minionTabPos)
@@ -269,6 +270,11 @@ def levelUpMinions(img, settings):
 
     logger.debug("carl " + str(carl))
     logger.debug("king " + str(king))
+    if carl == True and king == True:
+        if not np.array_equal(img[settings.skillNumber7Box.getSliceNP()], settings.skillNumber7IMG):
+            logger.debug("seven not found")
+            for i in rplist:
+                logger.debug("rplist : " + str(i))
     if carl != True or king != True:
         r[0] = 1
         if carl == True:

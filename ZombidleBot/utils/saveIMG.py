@@ -28,6 +28,9 @@ if sys.argv[2] == "ab":
 if sys.argv[2] == "aIMG":
     name = settings.ArcanePath
     crop_img = img[settings.arcaneIMGBox.getSliceNP()]
+if sys.argv[2] == "n7":
+    name = settings.skillNumber7Path
+    crop_img = img[settings.skillNumber7Box.getSliceNP()]
 if sys.argv[2] == "yc":
     name = settings.extendRPanelCrossPath
     crop_img = img[settings.extendRPanelCrossBox.getSliceNP()]
